@@ -12,6 +12,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const iniciarSesion = async (e) => {
   e.preventDefault();
@@ -19,11 +20,11 @@ const Login = () => {
   setLoading(true);
 
   try {
-    const response = await fetch("http://localhost:5000/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ correo, password }),
-    });
+    const response = await fetch(`${API_URL}/login`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ correo, password }),
+});
 
     if (!response.ok) throw new Error("Correo o contraseña incorrectos");
 

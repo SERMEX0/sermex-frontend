@@ -20,6 +20,7 @@ function App() {
   const [documentGenerated, setDocumentGenerated] = useState(false);
   const [documentBlob, setDocumentBlob] = useState(null);
   const [images, setImages] = useState([]); // Para almacenar las imágenes subidas
+  const API_URL = process.env.REACT_APP_API_URL;
 
 
   
@@ -172,19 +173,19 @@ function App() {
       }
   
       // Enviar al servidor
-      const response = await fetch('http://localhost:5000/api/enviar-garantia', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({
-          vendedorEmail: vendedores.find(v => v.id === selectedVendedor).email,
-          datosFormulario: formData,
-          documentoBase64: documentoBase64,
-          imagenes: imagenesBase64 // ← Envía las imágenes si existen
-        })
-      });
+      const response = await fetch(`${API_URL}/api/enviar-garantia`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  },
+  body: JSON.stringify({
+    vendedorEmail: vendedores.find(v => v.id === selectedVendedor).email,
+    datosFormulario: formData,
+    documentoBase64: documentoBase64,
+    imagenes: imagenesBase64 // ← Envía las imágenes si existen
+  })
+});
   
       if (!response.ok) throw new Error(await response.text());
       

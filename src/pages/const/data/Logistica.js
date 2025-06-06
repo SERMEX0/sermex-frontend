@@ -15,6 +15,7 @@ const Logistica = () => {
   const [pedidos, setPedidos] = useState([]);
   const [userEmail, setUserEmail] = useState('');
   const [loading, setLoading] = useState(true);
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const estadosOrdenados = ['recibido', 'en_revision', 'reparacion', 'completado'];
 
@@ -32,9 +33,9 @@ const Logistica = () => {
       const email = decoded.correo || decoded.email || '';
       setUserEmail(email);
 
-      axios.get(`http://localhost:5000/api/logistica/${email}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
+      axios.get(`${API_URL}/api/logistica/${email}`, {
+  headers: { 'Authorization': `Bearer ${token}` }
+})
       .then(res => {
         setPedidos(res.data || []);
         setLoading(false);
