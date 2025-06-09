@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 
-// Componente Header
+// Componente Header ajustado con logo responsivo
 const Header = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [imagenPerfil, setImagenPerfil] = useState(localStorage.getItem("fotoPerfil") || null);
@@ -24,97 +24,158 @@ const Header = () => {
   };
 
   return (
-    <header
-      style={{
-        width: "97%",
-        padding: '1px',
-        maxWidth: "1500px",
-        margin: "0 auto",
-        backgroundColor: "#345475",
-        color: "#ffffff",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "10px 20px",
-        zIndex: 2,
-        position: "relative",
-      }}
-    >
-      {/* Logo */}
-      <img
-        src="/logo_SERMEX_blanco.fw.png"
-        alt="Logo"
-        style={{ height: "80px", marginRight: "15px" }}
-      />
+    <>
+      <style>{`
+        .sermex-header {
+          width: 97%;
+          max-width: 1500px;
+          margin: 0 auto;
+          background-color: #345475;
+          color: #ffffff;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 10px 20px;
+          z-index: 2;
+          position: relative;
+        }
+        .sermex-header-logo {
+          height: 70px;
+          max-width: 160px;
+          width: auto;
+          object-fit: contain;
+          display: block;
+        }
+        .sermex-profile-container {
+          position: relative;
+          cursor: pointer;
+          margin-left: auto;
+          margin-right: 10px;
+          display: flex;
+          align-items: center;
+        }
+        .sermex-profile-avatar {
+          width: 54px;
+          height: 54px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 2px solid #fff;
+          background: #eaeaea;
+          transition: box-shadow 0.2s, border-color 0.2s;
+        }
+        .sermex-profile-avatar:hover {
+          border-color: #4474B0;
+          box-shadow: 0 4px 15px 0 rgba(68,116,176,0.11);
+        }
+        .sermex-profile-menu {
+          position: absolute;
+          top: 54px;
+          right: 0;
+          background: #fff;
+          border-radius: 8px;
+          box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+          padding: 10px 0;
+          display: flex;
+          flex-direction: column;
+          min-width: 170px;
+          z-index: 100;
+          animation: fadeInMenu 0.17s;
+        }
+        .sermex-profile-menu input[type="file"] {
+          display: none;
+        }
+        .sermex-profile-link {
+          padding: 10px 20px;
+          color: #345475;
+          text-decoration: none;
+          font-weight: 500;
+          background: none;
+          border: none;
+          text-align: left;
+          cursor: pointer;
+          transition: background 0.13s;
+        }
+        .sermex-profile-link:hover {
+          background: #f3f7ff;
+        }
+        .sermex-profile-link.logout {
+          color: #e13c3c;
+        }
+        @keyframes fadeInMenu {
+          from { opacity: 0; transform: translateY(10px);}
+          to { opacity: 1; transform: translateY(0);}
+        }
+        @media (max-width: 700px) {
+          .sermex-header {
+            padding: 6px 3vw;
+          }
+          .sermex-header-logo {
+            height: 68px;
+            max-width: 145px;
+          }
+          .sermex-profile-avatar {
+            width: 52px;
+            height: 52px;
+          }
+          .sermex-profile-menu {
+            top: 38px;
+            min-width: 97px;
+            font-size: 0.97rem;
+            right: 0;
+          }
+        }
+      `}</style>
+      <header className="sermex-header">
+        {/* Logo */}
+        <img
+          src="/logo_SERMEX_blanco.fw.png"
+          alt="Logo"
+          className="sermex-header-logo"
+        />
 
-      {/* Contenedor del perfil */}
-      <div
-        className="profile-container"
-        onClick={() => setMenuVisible(!menuVisible)}
-        style={{
-          position: "relative",
-          cursor: "pointer",
-          marginLeft: "auto",
-          marginRight: "20px",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        {/* Si hay imagen de perfil, mostrarla; si no, mostrar el icono */}
-        {imagenPerfil ? (
-          <img
-            src={imagenPerfil}
-            alt="Foto de perfil"
-            style={{
-              width: "45px",
-              height: "45px",
-              borderRadius: "50%",
-              objectFit: "cover",
-            }}
-          />
-        ) : (
-          <FaUserCircle size={40} color="#ffffff" />
-        )}
-
-        {/* Menú desplegable */}
-        {menuVisible && (
-          <div
-            className="profile-menu"
-            style={{
-              position: "absolute",
-              top: "50px",
-              right: "0",
-              backgroundColor: "#ffffff",
-              borderRadius: "5px",
-              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-              padding: "10px",
-              display: "flex",
-              flexDirection: "column",
-              minWidth: "150px",
-            }}
-          >
-            {/* Input oculto para subir imagen */}
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              style={{ display: "none" }}
-              id="upload-photo"
+        {/* Contenedor del perfil */}
+        <div
+          className="sermex-profile-container"
+          onClick={() => setMenuVisible(!menuVisible)}
+        >
+          {/* Si hay imagen de perfil, mostrarla; si no, mostrar el icono */}
+          {imagenPerfil ? (
+            <img
+              src={imagenPerfil}
+              alt="Foto de perfil"
+              className="sermex-profile-avatar"
             />
-            
-            <NavLink to="/perfil" className="profile-link" style={{ padding: "5px 10px" }}>
-              Mi Perfil
-            </NavLink>
-            <NavLink to="/configuracion" className="profile-link" style={{ padding: "5px 10px" }}>
-              Configuración
-            </NavLink>
-            <NavLink to="/" className="profile-link" style={{ padding: "5px 10px", color: "red" }}>
-              Cerrar Sesión
-            </NavLink>
-          </div>
-        )}
-      </div>
-    </header>
+          ) : (
+            <FaUserCircle size={40} color="#ffffff" />
+          )}
+
+          {/* Menú desplegable */}
+          {menuVisible && (
+            <div className="sermex-profile-menu">
+              {/* Input oculto para subir imagen */}
+              <label className="sermex-profile-link" htmlFor="upload-photo">
+                Cambiar foto de perfil
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  id="upload-photo"
+                />
+              </label>
+              <NavLink to="/perfil" className="sermex-profile-link">
+                Mi Perfil
+              </NavLink>
+              <NavLink to="/configuracion" className="sermex-profile-link">
+                Configuración
+              </NavLink>
+              <NavLink to="/" className="sermex-profile-link logout">
+                Cerrar Sesión
+              </NavLink>
+            </div>
+          )}
+        </div>
+      </header>
+    </>
   );
 };
 
@@ -164,85 +225,63 @@ const Inicio = () => {
             padding: "100px",
             borderRadius: "10px",
             zIndex: 1,
+            maxWidth: "98vw"
           }}
         >
-   
           <h2>Centro de Ayuda SERMEX</h2>
           <h6>
-          SERMEX ofrece soporte técnico para resolver problemas con tus equipos y optimizar su rendimiento.
+            SERMEX ofrece soporte técnico para resolver problemas con tus equipos y optimizar su rendimiento.
           </h6>
 
-          {/* Botón de navegación */}
+          {/* Botones */}
           <div>
-          <button
-    onClick={() => navigate("/seleccionar-producto")}
-    style={{
-      padding: "10px 20px",
-      fontSize: "1rem",
-      cursor: "pointer",
-      backgroundColor: "#fff",
-      color: "#345475",
-      border: "none",
-      borderRadius: "5px",
-      marginTop: "15px",
-      transition: "background-color 0.3s ease",
-    }}
-    onMouseOver={(e) => (e.target.style.backgroundColor = "#ddd")}
-    onMouseOut={(e) => (e.target.style.backgroundColor = "#fff")}
-  >
-    Panel principal
-  </button>
-</div>
-
-  <div>
-  <button
-    onClick={() => navigate("/Rma")}
-    style={{
-      padding: "10px 20px",
-      fontSize: "1rem",
-      cursor: "pointer",
-      backgroundColor: "#fff",
-      color: "#345475",
-      border: "none",
-      borderRadius: "5px",
-      marginTop: "15px",
-      transition: "background-color 0.3s ease",
-    }}
-    onMouseOver={(e) => (e.target.style.backgroundColor = "#ddd")}
-    onMouseOut={(e) => (e.target.style.backgroundColor = "#fff")}
-  >
-    Crear solicitud RMA
-  </button>
-  </div>
-
-<div>
-  <button
-    onClick={() => navigate("/logistica")}
-    style={{
-      padding: "10px 20px",
-      fontSize: "1rem",
-      cursor: "pointer",
-      backgroundColor: "#fff",
-      color: "#345475",
-      border: "none",
-      borderRadius: "5px",
-      marginTop: "15px",
-      transition: "background-color 0.3s ease",
-    }}
-    onMouseOver={(e) => (e.target.style.backgroundColor = "#ddd")}
-    onMouseOut={(e) => (e.target.style.backgroundColor = "#fff")}
-  >
-    Ver seguimiento de reporte
-  </button>
-  </div>
+            <button
+              onClick={() => navigate("/seleccionar-producto")}
+              style={buttonStyle}
+              onMouseOver={e => e.target.style.backgroundColor = "#ddd"}
+              onMouseOut={e => e.target.style.backgroundColor = "#fff"}
+            >
+              Panel principal
+            </button>
+          </div>
+          <div>
+            <button
+              onClick={() => navigate("/Rma")}
+              style={buttonStyle}
+              onMouseOver={e => e.target.style.backgroundColor = "#ddd"}
+              onMouseOut={e => e.target.style.backgroundColor = "#fff"}
+            >
+              Crear solicitud RMA
+            </button>
+          </div>
+          <div>
+            <button
+              onClick={() => navigate("/logistica")}
+              style={buttonStyle}
+              onMouseOver={e => e.target.style.backgroundColor = "#ddd"}
+              onMouseOut={e => e.target.style.backgroundColor = "#fff"}
+            >
+              Ver seguimiento de reporte
+            </button>
+          </div>
         </div>
       </div>
-
-      {/* Footer */}
-     
-     <Footer />
+      <Footer />
     </div>
   );
+};
+
+// Estilos de botones reutilizables
+const buttonStyle = {
+  padding: "10px 20px",
+  fontSize: "1rem",
+  cursor: "pointer",
+  backgroundColor: "#fff",
+  color: "#345475",
+  border: "none",
+  borderRadius: "5px",
+  marginTop: "15px",
+  transition: "background-color 0.3s ease",
 };
 
 export default Inicio;

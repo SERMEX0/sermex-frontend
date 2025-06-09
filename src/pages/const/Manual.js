@@ -276,6 +276,11 @@ const HeroImageContainer = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 180px;
+  @media (max-width: 600px) {
+    min-width: 120px;
+    max-width: 100vw;
+    padding: 10px;
+  }
 `;
 
 const HeroImage = styled.img`
@@ -284,6 +289,10 @@ const HeroImage = styled.img`
   max-height: 210px;
   border-radius: 12px;
   object-fit: contain;
+  @media (max-width: 600px) {
+    max-height: 110px;
+    border-radius: 7px;
+  }
 `;
 
 const ImagePlaceholder = styled.div`
@@ -311,6 +320,10 @@ const HeroDetails = styled.div`
     font-weight: 700;
     margin-bottom: 8px;
     letter-spacing: 0.5px;
+    @media (max-width: 600px) {
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+    }
   }
 `;
 
@@ -345,6 +358,12 @@ const InfoBox = styled.div`
     font-size: 1.08rem;
     font-weight: 500;
   }
+  @media (max-width: 600px) {
+    padding: 5px 9px;
+    min-width: 70px;
+    span { font-size: 0.93rem;}
+    strong { font-size: 0.89rem;}
+  }
 `;
 
 const HeroDesc = styled.div`
@@ -357,6 +376,11 @@ const HeroDesc = styled.div`
   display: inline-block;
   margin-top: 4px;
   letter-spacing: 0.2px;
+  @media (max-width: 600px) {
+    font-size: .97rem;
+    padding: 4px 9px;
+    border-radius: 5px;
+  }
 `;
 
 const SoporteBtn = styled.button`
@@ -392,7 +416,7 @@ const StickyTabs = styled.div`
   border-radius: 13px;
   overflow: hidden;
   margin: 38px auto 0 auto;
-  gap: 18px; /* <-- ¡Aquí está el espacio entre los botones! */
+  gap: 18px;
   border: 1.5px solid #e0e7ef;
   background: #f9fbfd;
   max-width: 720px;
@@ -400,7 +424,12 @@ const StickyTabs = styled.div`
   position: sticky;
   top: 0;
   z-index: 2;
-  padding: 4px; /* Un poco de padding interno queda bonito */
+  padding: 4px;
+  @media (max-width: 600px) {
+    gap: 6px;
+    max-width: 99vw;
+    padding: 2px;
+  }
 `;
 
 const TabBtn = styled.button`
@@ -425,12 +454,21 @@ const TabBtn = styled.button`
     background: #eaf0fa;
     color: #233553;
   }
+  @media (max-width: 600px) {
+    font-size: 0.97rem;
+    padding: 10px 0;
+    gap: 5px;
+  }
 `;
 
 const FadeSection = styled.div`
   animation: ${fadeUp} 0.48s;
   margin: 38px auto 42px auto;
   max-width: 1100px;
+  @media (max-width: 600px) {
+    margin: 16px auto 22px auto;
+    max-width: 99vw;
+  }
 `;
 
 const CardsFlex = styled.div`
@@ -440,7 +478,7 @@ const CardsFlex = styled.div`
   gap: 28px;
   @media (max-width: 950px) {
     flex-direction: column;
-    gap: 32px;
+    gap: 24px;
   }
 `;
 
@@ -457,6 +495,8 @@ const InfoCardVibrant = styled.div`
   @media (max-width: 950px) {
     min-width: 0;
     width: 100%;
+    padding: 19px 8px 18px 8px;
+    border-radius: 11px;
   }
 `;
 
@@ -498,6 +538,11 @@ const SectionTitle = styled.h3`
   display: flex;
   align-items: center;
   gap: 13px;
+  @media (max-width: 600px) {
+    font-size: 1.05rem;
+    margin-bottom: 8px;
+    gap: 8px;
+  }
 `;
 
 const InfoSubtitle = styled.h4`
@@ -505,6 +550,10 @@ const InfoSubtitle = styled.h4`
   color: #345475;
   font-weight: 500;
   margin-bottom: 13px;
+  @media (max-width: 600px) {
+    font-size: 0.95rem;
+    margin-bottom: 7px;
+  }
 `;
 
 const InfoText = styled.div`
@@ -519,6 +568,12 @@ const InfoText = styled.div`
   li {
     margin-bottom: 7px;
     line-height: 1.5;
+  }
+  @media (max-width: 600px) {
+    font-size: .95rem;
+    margin-bottom: 11px;
+    ul { padding-left: 18px; }
+    li { margin-bottom: 4px; }
   }
 `;
 
@@ -548,6 +603,10 @@ const DetailItem = styled.div`
   line-height: 1.5;
   display: flex;
   align-items: center;
+  @media (max-width: 600px) {
+    font-size: .90rem;
+    margin-bottom: 5px;
+  }
 `;
 
 const HeroSkeleton = styled.div`

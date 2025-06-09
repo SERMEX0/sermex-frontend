@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -74,7 +74,7 @@ const LoadingPlaceholder = () => (
 );
 
 // --- GALLERY ---
-const ProductGallery = ({ images, sliderRef }) => {
+const ProductGallery = ({ images }) => {
   const [zoom, setZoom] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -96,7 +96,6 @@ const ProductGallery = ({ images, sliderRef }) => {
           alt={`Miniatura ${i}`}
         />
       ),
-      ref: sliderRef,
     }),
     [images]
   );
@@ -120,7 +119,6 @@ const ProductGallery = ({ images, sliderRef }) => {
             <Img
               src={imgUrl}
               alt={`Imagen ${i + 1}`}
-              className={zoom ? "zoom" : ""}
               $zoom={zoom}
               onClick={() => setZoom(!zoom)}
               onError={(e) => {
@@ -131,6 +129,7 @@ const ProductGallery = ({ images, sliderRef }) => {
             <ZoomBtn
               onClick={() => setZoom(!zoom)}
               aria-label={zoom ? "Reducir imagen" : "Ampliar imagen"}
+              type="button"
             >
               {zoom ? <FaCompress /> : <FaExpand />}
             </ZoomBtn>
@@ -229,21 +228,21 @@ const ProductDetail = () => {
 
   // WhatsApp handler
   const handleContact = () => {
-  let mail =
-    sessionStorage.getItem("userEmail") ||
-    localStorage.getItem("userEmail") ||
-    "Correo no disponible";
-  if (mail === "Correo no disponible") {
-    mail = prompt("Por favor, ingresa tu correo para la cotización:");
-    if (!mail) return; // El usuario canceló
-  }
-  const phone = "524434368655";
-  const msg = `¡Hola! Estoy interesado cotizar mas piezas de:\n\n*Nombre del producto:* ${producto?.Nombre}\n*Correo del cliente:* ${mail}\n¿Podrían brindarme más información?`;
-  window.open(
-    `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`,
-    "_blank"
-  );
-};
+    let mail =
+      sessionStorage.getItem("userEmail") ||
+      localStorage.getItem("userEmail") ||
+      "Correo no disponible";
+    if (mail === "Correo no disponible") {
+      mail = prompt("Por favor, ingresa tu correo para la cotización:");
+      if (!mail) return; // El usuario canceló
+    }
+    const phone = "524434368655";
+    const msg = `¡Hola! Estoy interesado cotizar mas piezas de:\n\n*Nombre del producto:* ${producto?.Nombre}\n*Correo del cliente:* ${mail}\n¿Podrían brindarme más información?`;
+    window.open(
+      `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`,
+      "_blank"
+    );
+  };
 
   if (!producto) return <LoadingPlaceholder />;
 
@@ -288,7 +287,6 @@ const ProductDetail = () => {
 export default ProductDetail;
 
 // -------------------- STYLED COMPONENTS --------------------
-
 const fadeUp = keyframes`
   from { opacity: 0; transform: translateY(45px);}
   to { opacity: 1; transform: translateY(0);}
@@ -305,9 +303,19 @@ const MainContainer = styled.div`
 const Content = styled.div`
   max-width: 1200px;
   margin: 32px auto 24px auto;
-  padding: 0;
+  padding: 0 24px;
   flex: 1;
   width: 100%;
+
+  @media (max-width: 900px) {
+    margin: 20px auto 16px auto;
+    padding: 0 10px;
+    max-width: 98vw;
+  }
+  @media (max-width: 600px) {
+    margin: 8px 0 8px 0;
+    padding: 0 3vw;
+  }
 `;
 
 const ProductHeroSkeleton = styled.div`
@@ -315,6 +323,12 @@ const ProductHeroSkeleton = styled.div`
   align-items: flex-start;
   gap: 44px;
   margin-bottom: 38px;
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+    gap: 18px;
+    margin-bottom: 22px;
+  }
 `;
 
 const HeroZone = styled.section`
@@ -326,19 +340,33 @@ const HeroZone = styled.section`
   box-shadow: 0 6px 30px #4368a80a;
   padding: 36px 44px 32px 32px;
   margin-bottom: 35px;
+
   @media (max-width: 900px) {
     flex-direction: column;
-    gap: 22px;
+    gap: 18px;
     padding: 19px 8px;
+    border-radius: 14px;
+    margin-bottom: 22px;
+  }
+  @media (max-width: 600px) {
+    padding: 10px 2vw;
+    margin-bottom: 12px;
+    border-radius: 9px;
   }
 `;
 
 const HeroImage = styled.div`
   flex: 1.2;
-  min-width: 260px;
+  min-width: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 900px) {
+    min-width: 0;
+    width: 100%;
+    justify-content: center;
+  }
 `;
 
 const HeroInfo = styled.div`
@@ -348,6 +376,11 @@ const HeroInfo = styled.div`
   justify-content: center;
   gap: 14px;
   min-width: 0;
+
+  @media (max-width: 900px) {
+    width: 100%;
+    gap: 9px;
+  }
 `;
 
 const BackBtn = styled.button`
@@ -367,6 +400,11 @@ const BackBtn = styled.button`
   &:hover {
     background: #d7edfa;
   }
+  @media (max-width: 600px) {
+    font-size: 0.98rem;
+    padding: 6px 11px;
+    margin-bottom: 6px;
+  }
 `;
 
 const HeroTitle = styled.h1`
@@ -375,8 +413,12 @@ const HeroTitle = styled.h1`
   color: #1d3557;
   margin-bottom: 5px;
   letter-spacing: 0.4px;
+  @media (max-width: 900px) {
+    font-size: 1.5rem;
+  }
   @media (max-width: 600px) {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
+    margin-bottom: 2px;
   }
 `;
 
@@ -398,10 +440,18 @@ const HeroBadge = styled.span`
   display: flex;
   align-items: center;
   gap: 5px;
+  @media (max-width: 600px) {
+    font-size: 0.92rem;
+    padding: 4px 10px;
+    border-radius: 8px;
+  }
 `;
 
 const HeroActions = styled.div`
   margin-top: 18px;
+  @media (max-width: 600px) {
+    margin-top: 9px;
+  }
 `;
 
 const QuoteBtn = styled.button`
@@ -422,6 +472,11 @@ const QuoteBtn = styled.button`
     background: linear-gradient(90deg, #128c7e 90%, #075e54 100%);
     transform: scale(1.05);
   }
+  @media (max-width: 600px) {
+    font-size: 1rem;
+    padding: 8px 16px;
+    border-radius: 18px;
+  }
 `;
 
 const StickyTabs = styled.div`
@@ -438,12 +493,18 @@ const StickyTabs = styled.div`
   z-index: 2;
   padding: 4px;
   justify-content: center;
+
+  @media (max-width: 600px) {
+    gap: 5px;
+    max-width: 99vw;
+    padding: 2px;
+  }
 `;
 
 const TabBtn = styled.button`
   flex: 1;
-  min-width: 170px;
-  padding: 19px 0;
+  min-width: 120px;
+  padding: 14px 0;
   background: none;
   border: none;
   font-size: 1.13rem;
@@ -465,12 +526,22 @@ const TabBtn = styled.button`
     color: #233553;
     box-shadow: 0 6px 22px 0 rgba(44,80,150,0.09);
   }
+  @media (max-width: 600px) {
+    font-size: 0.98rem;
+    padding: 9px 0;
+    min-width: 80px;
+    gap: 6px;
+  }
 `;
 
 const TabSection = styled.div`
   margin: 44px auto 0 auto;
   max-width: 660px;
   animation: ${fadeUp} 0.66s;
+  @media (max-width: 600px) {
+    margin: 19px auto 0 auto;
+    max-width: 99vw;
+  }
 `;
 
 const FeatureCard = styled.section`
@@ -480,6 +551,11 @@ const FeatureCard = styled.section`
   box-shadow: 0 7px 34px rgba(52,84,117,0.10);
   margin-bottom: 18px;
   min-height: 120px;
+  @media (max-width: 600px) {
+    padding: 18px 7px 13px 7px;
+    border-radius: 13px;
+    min-height: 60px;
+  }
 `;
 
 const CardTitle = styled.h3`
@@ -490,6 +566,11 @@ const CardTitle = styled.h3`
   display: flex;
   align-items: center;
   gap: 17px;
+  @media (max-width: 600px) {
+    font-size: 0.99rem;
+    margin-bottom: 10px;
+    gap: 8px;
+  }
 `;
 
 const Badge = styled.span`
@@ -507,6 +588,11 @@ const Badge = styled.span`
     : "#374151"};
   letter-spacing: 1px;
   vertical-align: middle;
+  @media (max-width: 600px) {
+    font-size: 0.77rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
 `;
 
 const FeatureItem = styled.li`
@@ -518,6 +604,10 @@ const FeatureItem = styled.li`
   .ok {
     color: #128c7e;
   }
+  @media (max-width: 600px) {
+    font-size: 0.93rem;
+    gap: 5px;
+  }
 `;
 
 const NoData = styled.p`
@@ -525,6 +615,10 @@ const NoData = styled.p`
   font-style: italic;
   text-align: center;
   margin: 12px 0;
+  @media (max-width: 600px) {
+    margin: 7px 0;
+    font-size: 0.92rem;
+  }
 `;
 
 const Gallery = styled.div`
@@ -532,8 +626,12 @@ const Gallery = styled.div`
   max-width: 350px;
   margin: 0 auto;
   padding: 0 6px;
-  @media (max-width: 600px) {
+  @media (max-width: 900px) {
     max-width: 98vw;
+  }
+  @media (max-width: 600px) {
+    max-width: 99vw;
+    padding: 0 1vw;
   }
 `;
 
@@ -552,6 +650,13 @@ const Img = styled.img`
       z-index: 2;
       box-shadow: 0 8px 40px #0002;
     `}
+  @media (max-width: 900px) {
+    height: 220px;
+  }
+  @media (max-width: 600px) {
+    height: 140px;
+    border-radius: 8px;
+  }
 `;
 
 const ZoomBtn = styled.button`
@@ -573,6 +678,13 @@ const ZoomBtn = styled.button`
   &:hover {
     background: #2224;
   }
+  @media (max-width: 600px) {
+    width: 28px;
+    height: 28px;
+    font-size: 1rem;
+    bottom: 7px;
+    right: 7px;
+  }
 `;
 
 const ImgCounter = styled.span`
@@ -584,6 +696,12 @@ const ImgCounter = styled.span`
   padding: 2px 13px;
   border-radius: 16px;
   font-size: 15px;
+  @media (max-width: 600px) {
+    font-size: 12px;
+    padding: 2px 7px;
+    left: 7px;
+    bottom: 7px;
+  }
 `;
 
 const ArrowBtn = styled.button`
@@ -601,11 +719,13 @@ const ArrowBtn = styled.button`
   top: 50%;
   transform: translateY(-50%);
   z-index: 2;
-  &.prev {
-    left: -12px;
-  }
-  &.next {
-    right: -12px;
+  &.prev { left: -12px; }
+  &.next { right: -12px; }
+  @media (max-width: 600px) {
+    width: 25px;
+    height: 25px;
+    left: -7px;
+    right: -7px;
   }
 `;
 
@@ -616,6 +736,10 @@ const Dots = styled.ul`
   margin: 13px 0 0 0;
   padding: 0;
   list-style: none;
+  @media (max-width: 600px) {
+    gap: 3px;
+    margin: 7px 0 0 0;
+  }
 `;
 
 const DotImg = styled.img`
@@ -630,5 +754,10 @@ const DotImg = styled.img`
   &.slick-active {
     border-color: #1273b6;
     filter: grayscale(0);
+  }
+  @media (max-width: 600px) {
+    width: 23px;
+    height: 23px;
+    border-radius: 3px;
   }
 `;

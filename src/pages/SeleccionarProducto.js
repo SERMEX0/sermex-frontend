@@ -22,34 +22,36 @@ const Header = () => {
 
   return (
     <HeaderBar>
-      <Logo
-        src="/logo_SERMEX_blanco.fw.png"
-        alt="Logo"
-        onClick={() => navigate("/inicio")}
-      />
-      <HeaderActions>
-        <HeaderBtn onClick={() => navigate("/inicio")}>Volver al Inicio</HeaderBtn>
-        <HeaderBtn secondary onClick={cerrarSesion}>Cerrar Sesión</HeaderBtn>
-        <ProfileArea
-          onClick={() => setMenuVisible(!menuVisible)}
-          tabIndex={0}
-          onBlur={() => setTimeout(() => setMenuVisible(false), 180)}
-        >
-          {fotoPerfil ? (
-            <ProfileImg src={fotoPerfil} alt="Perfil" />
-          ) : (
-            <FaUserCircle size={40} color="#fff" />
-          )}
-          {menuVisible && (
-            <ProfileMenu>
-              <MenuLink to="/perfil" onClick={() => setMenuVisible(false)}>Mi Perfil</MenuLink>
-              <MenuLink to="/configuracion" onClick={() => setMenuVisible(false)}>Configuración</MenuLink>
-              <MenuLogout onClick={cerrarSesion}>Cerrar Sesión</MenuLogout>
-            </ProfileMenu>
-          )}
-        </ProfileArea>
-      </HeaderActions>
-    </HeaderBar>
+  <LogoContainer>
+    <Logo
+      src="/logo_SERMEX_blanco.fw.png"
+      alt="Logo"
+      onClick={() => navigate("/inicio")}
+    />
+  </LogoContainer>
+  <HeaderActions>
+    <HeaderBtn onClick={() => navigate("/inicio")}>Volver al Inicio</HeaderBtn>
+    <HeaderBtn secondary onClick={cerrarSesion}>Cerrar Sesión</HeaderBtn>
+    <ProfileArea
+      onClick={() => setMenuVisible(!menuVisible)}
+      tabIndex={0}
+      onBlur={() => setTimeout(() => setMenuVisible(false), 180)}
+    >
+      {fotoPerfil ? (
+        <ProfileImg src={fotoPerfil} alt="Perfil" />
+      ) : (
+        <FaUserCircle size={40} color="#fff" />
+      )}
+      {menuVisible && (
+        <ProfileMenu>
+          <MenuLink to="/perfil" onClick={() => setMenuVisible(false)}>Mi Perfil</MenuLink>
+          <MenuLink to="/configuracion" onClick={() => setMenuVisible(false)}>Configuración</MenuLink>
+          <MenuLogout onClick={cerrarSesion}>Cerrar Sesión</MenuLogout>
+        </ProfileMenu>
+      )}
+    </ProfileArea>
+  </HeaderActions>
+</HeaderBar>
   );
 };
 
@@ -189,36 +191,54 @@ const MainContainer = styled.div`
   flex-direction: column;
 `;
 
+// Header --- Logo y avatar alineados, responsivo
 const HeaderBar = styled.header`
   width: 97%;
   background: linear-gradient(90deg, #345475 78%, #4474B0 100%);
   color: #fff;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between;  // IMPORTANTE
   padding: 13px 2vw;
   z-index: 1000;
   position: sticky;
   top: 0;
   box-shadow: 0 2px 10px rgba(0,0,0,0.09);
+
+  @media (max-width: 700px) {
+    padding: 9px 4vw;
+  }
+`;
+
+const LogoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  height: 300%;
 `;
 
 const Logo = styled.img`
-  height: 44px;
-  margin-right: 12px;
-  cursor: pointer;
-  transition: transform 0.15s;
-  &:hover { transform: scale(1.07); }
+ height: 70px;
+width: 70px;
+max-width: 120px;
+  object-fit: contain;
+  display: block;
+  margin-right: 0;
+  @media (max-width: 700px) {
+    height: 80px;
+width: 80px;
+max-width: 120px;
+  }
 `;
 
 const HeaderActions = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 13px;
+  margin-left: 95px; // Esto asegura que todo lo de adentro se va al extremo derecho
 `;
 
 const HeaderBtn = styled.button`
-  padding: 8px 16px;
+  padding: 10px 18px;
   font-size: 1rem;
   cursor: pointer;
   background: ${({ secondary }) => secondary ? "rgba(255,255,255,0.10)" : "none"};
@@ -231,12 +251,18 @@ const HeaderBtn = styled.button`
     background: rgba(255,255,255,0.18);
     border-color: rgba(255,255,255,0.5);
   }
+  @media (max-width: 700px) {
+    padding: 7px 10px;
+    font-size: 0.97rem;
+  }
 `;
 
 const ProfileArea = styled.div`
   position: relative;
   cursor: pointer;
   margin-left: 10px;
+  display: flex;
+  align-items: center;
 `;
 
 const ProfileImg = styled.img`
@@ -245,6 +271,11 @@ const ProfileImg = styled.img`
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid rgba(255,255,255,0.5);
+  background: #eaeaea;
+  @media (max-width: 700px) {
+    width: 32px;
+    height: 32px;
+  }
 `;
 
 const ProfileMenu = styled.div`
@@ -258,6 +289,11 @@ const ProfileMenu = styled.div`
   flex-direction: column;
   min-width: 180px;
   z-index: 1001;
+  animation: fadeInMenu 0.17s;
+  @keyframes fadeInMenu {
+    from {opacity: 0; transform: translateY(10px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
 `;
 
 const MenuLink = styled(NavLink)`
@@ -282,6 +318,13 @@ const Content = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+
+  @media (max-width: 900px) {
+    padding: 30px 5vw;
+  }
+  @media (max-width: 700px) {
+    padding: 18px 2vw;
+  }
 `;
 
 const MainTitle = styled.h1`
@@ -329,6 +372,10 @@ const ProductGrid = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   gap: 28px;
   width: 100%;
+  @media (max-width: 700px) {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
 `;
 
 const ProductCardBox = styled.div`
@@ -361,6 +408,9 @@ const ProductImgWrap = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
+  @media (max-width: 700px) {
+    height: 120px;
+  }
 `;
 
 const ProductImg = styled.img`
@@ -375,6 +425,10 @@ const ProductImg = styled.img`
   transition: transform 0.35s cubic-bezier(.47,1.64,.41,.8);
   ${ProductCardBox}:hover & {
     transform: scale(1.045);
+  }
+  @media (max-width: 700px) {
+    max-width: 120px;
+    max-height: 90px;
   }
 `;
 
