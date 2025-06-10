@@ -25,7 +25,7 @@ const Header = ({ productos = [] }) => {
 
   return (
     <header style={{
-  width: "100%", // Cambiado de 97% a 100%
+  width: "107%", // Cambiado de 97% a 100%
   maxWidth: "1500px",
   background: "linear-gradient(90deg, #345475 70%, #4474B0 100%)",
     color: "#fff",

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import styled, { css } from "styled-components";
-import Footer from "../components/Footer";
+
 
 // --- HEADER PROFESIONAL ---
 const Header = () => {
@@ -139,7 +139,7 @@ const SeleccionarProducto = () => {
           </EmptyState>
         )}
       </Content>
-      <Footer />
+     
     </MainContainer>
   );
 };
@@ -349,7 +349,7 @@ const Subtitle = styled.p`
 
 const SearchWrap = styled.div`
   margin: 0 auto 28px;
-  max-width: 520px;
+  max-width: 360px;
   width: 100%;
 `;
 

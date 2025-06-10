@@ -195,6 +195,7 @@ const Inicio = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          width: "104%",
         }}
       >
         {/* Video de fondo */}
@@ -207,7 +208,7 @@ const Inicio = () => {
             position: "absolute",
             top: 0,
             left: 0,
-            width: "100%",
+            width: "101%",
             height: "100%",
             objectFit: "cover",
             zIndex: -1,

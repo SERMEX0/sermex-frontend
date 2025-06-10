@@ -404,6 +404,7 @@ const BackBtn = styled.button`
     font-size: 0.98rem;
     padding: 6px 11px;
     margin-bottom: 6px;
+    margin-top: 20px; /* <-- Aumenta este valor si quieres bajarlo más */
   }
 `;
 

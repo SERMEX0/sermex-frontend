@@ -248,6 +248,7 @@ const Footer = () => (
     padding: "20px",
     textAlign: "center",
     marginTop: "auto",
+    width: "96%",
   }}>
     <p>© 2025 - Todos los derechos reservados</p>
   </footer>
