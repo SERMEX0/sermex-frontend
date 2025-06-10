@@ -272,9 +272,10 @@ const ProfileImg = styled.img`
   object-fit: cover;
   border: 2px solid rgba(255,255,255,0.5);
   background: #eaeaea;
+  /* Hazla MÁS GRANDE en móvil (máx 200px) */
   @media (max-width: 700px) {
-    width: 32px;
-    height: 32px;
+    width: 50px;
+    height: 50px;
   }
 `;
 
@@ -396,6 +397,10 @@ const ProductCardBox = styled.div`
       box-shadow: 0 14px 32px rgba(52,84,117,0.18);
       border-color: #b1c6d9;
     `
+  }
+  /* MÁS CHICO EN MÓVIL */
+  @media (max-width: 700px) {
+    border-radius: 11px;
   }
 `;
 
