@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import Header from "../../../components/Header2";
-import Footer from "../../../components/Footer";
+
 
 // 1. Diccionario de descripciones para cada estado
 const descripcionesEstado = {
@@ -126,7 +126,7 @@ const Logistica = () => {
           ))}
         </div>
       )}
-      <Footer />
+      
     </div>
     
   );

@@ -2,14 +2,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { useState, useEffect } from "react";
 
-/**
- * Header responsivo:
- * - width: 101% en escritorio/tablet
- * - width: 109% en móvil (máx 600px)
- * - Ajusta paddings para que no se corte contenido en celular
- * - El resto del diseño se mantiene igual, solo se agrega CSS global para el ancho
- */
-
 const Header = ({ productos = [] }) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [fotoPerfil, setFotoPerfil] = useState(null);
@@ -21,11 +13,6 @@ const Header = ({ productos = [] }) => {
       setFotoPerfil(fotoGuardada);
     }
   }, []);
-
-  const cerrarSesion = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
-  };
 
   const handleProductoClick = (producto) => {
     navigate("/detalle-producto", { state: { producto } });
@@ -66,7 +53,7 @@ const Header = ({ productos = [] }) => {
       <div style={{
         display: "flex",
         alignItems: "center",
-        gap: "15px",
+        gap: "7px", // <--- Movemos los botones más juntos
       }}>
         {/* Botón para seleccionar productos (si hay) */}
         {productos.length > 0 && (
@@ -108,24 +95,6 @@ const Header = ({ productos = [] }) => {
           Volver
         </button>
 
-        {/* Cerrar Sesión */}
-        <button
-          onClick={cerrarSesion}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "rgba(255,255,255,0.1)",
-            color: "#fff",
-            border: "1px solid rgba(255,255,255,0.3)",
-            borderRadius: "30px",
-            cursor: "pointer",
-            fontSize: "0.9rem",
-            fontWeight: "500",
-            transition: "all 0.3s ease"
-          }}
-        >
-          Cerrar Sesión
-        </button>
-
         {/* Perfil */}
         <div
           className="profile-container"
@@ -135,7 +104,7 @@ const Header = ({ productos = [] }) => {
           style={{
             position: "relative",
             cursor: "pointer",
-            marginLeft: "15px",
+            marginRight: "45px", // <--- Movemos la imagen más a la izquierda
             display: "flex",
             alignItems: "center",
           }}

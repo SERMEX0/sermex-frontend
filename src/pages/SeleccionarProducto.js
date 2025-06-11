@@ -31,7 +31,7 @@ const Header = () => {
   </LogoContainer>
   <HeaderActions>
     <HeaderBtn onClick={() => navigate("/inicio")}>Volver al Inicio</HeaderBtn>
-    <HeaderBtn secondary onClick={cerrarSesion}>Cerrar Sesión</HeaderBtn>
+    
     <ProfileArea
       onClick={() => setMenuVisible(!menuVisible)}
       tabIndex={0}
