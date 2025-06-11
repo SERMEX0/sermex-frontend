@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import Footer from "../components/Footer";
 /**
  * MEJORA DE ESTILO Y DISEÑO:
  * - Uso de diseño más limpio y profesional con una sola card principal centrada
@@ -20,13 +20,7 @@ const Perfil = () => {
   );
   const navigate = useNavigate();
 
-  const cerrarSesion = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("user");
-    navigate("/login");
-  };
+  
 
   const handleImagenChange = (e) => {
     const file = e.target.files[0];
@@ -59,9 +53,7 @@ const Perfil = () => {
           >
             Volver
           </button>
-          <button onClick={cerrarSesion} style={headerStyles.logoutButton}>
-            Cerrar Sesión
-          </button>
+          
           <div style={headerStyles.profileContainer}>
             {imagenPerfil ? (
               <img
@@ -186,7 +178,7 @@ const headerStyles = {
     transition: "background 0.2s",
   },
   logoutButton: {
-    padding: "9px 18px",
+    padding: "9px 15px",
     background: "rgba(255,255,255,0.13)",
     color: "#fff",
     border: "1px solid rgba(255,255,255,0.25)",
@@ -398,20 +390,6 @@ if (typeof window !== "undefined") {
 }
 
 // Footer elegante y fijo
-const Footer = () => (
-  <footer style={{
-    background: "linear-gradient(90deg, #345475 70%, #4474B0 100%)",
-    color: "#fff",
-    padding: "18px 0 12px 0",
-    textAlign: "center",
-    marginTop: "auto",
-    fontSize: "1rem",
-    fontWeight: 500,
-    letterSpacing: "-0.5px",
-    boxShadow: "0 -2px 16px rgba(52,84,117,0.03)"
-  }}>
-    <p style={{ margin: 0 }}>© 2025 - Todos los derechos reservados</p>
-  </footer>
-);
+
 
 export default Perfil;

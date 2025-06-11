@@ -27,7 +27,7 @@ const Header = () => {
     <>
       <style>{`
         .sermex-header {
-          width: 97%;
+          width: 99%;
           max-width: 1500px;
           margin: 0 auto;
           background-color: #345475;

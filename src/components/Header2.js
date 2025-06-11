@@ -1,6 +1,14 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { FaTools, FaBoxOpen, FaChartLine, FaUserCircle } from "react-icons/fa";
+import { FaUserCircle } from "react-icons/fa";
 import { useState, useEffect } from "react";
+
+/**
+ * Header responsivo:
+ * - width: 101% en escritorio/tablet
+ * - width: 109% en móvil (máx 600px)
+ * - Ajusta paddings para que no se corte contenido en celular
+ * - El resto del diseño se mantiene igual, solo se agrega CSS global para el ancho
+ */
 
 const Header = ({ productos = [] }) => {
   const [menuVisible, setMenuVisible] = useState(false);
@@ -24,25 +32,23 @@ const Header = ({ productos = [] }) => {
   };
 
   return (
-    <header style={{
-  width: "107%", // Cambiado de 97% a 100%
-  maxWidth: "1500px",
-  background: "linear-gradient(90deg, #345475 70%, #4474B0 100%)",
-    color: "#fff",
-  margin: "0 auto", // Esto centrará el contenido si la pantalla es más ancha que 1500px
- 
-  color: "#ffffff",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "space-between",
-  padding: "15px 30px",
-  zIndex: 1000,
-  position: "sticky",
-  top: 0,
-  boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-  boxSizing: "border-box" // Añade esto para que el padding no afecte el ancho total
-}}>
-      {/* Logo con efecto de sombra */}
+    <header className="header2-sermex" style={{
+      width: "101%", // Por defecto, escritorio/tablet
+      maxWidth: "1500px",
+      background: "linear-gradient(90deg, #345475 70%, #4474B0 100%)",
+      color: "#fff",
+      margin: "0 auto",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: "15px 30px",
+      zIndex: 1000,
+      position: "sticky",
+      top: 0,
+      boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+      boxSizing: "border-box"
+    }}>
+      {/* Logo */}
       <div style={{ display: "flex", alignItems: "center" }}>
         <img 
           src="/logo_SERMEX_blanco.fw.png" 
@@ -56,16 +62,13 @@ const Header = ({ productos = [] }) => {
         />
       </div>
 
-      {/* Navegación principal con estilos mejorados */}
-     
-
-      {/* Botones de acción con estilo moderno */}
+      {/* Botones de acción */}
       <div style={{
         display: "flex",
         alignItems: "center",
         gap: "15px",
       }}>
-        {/* Botón para seleccionar productos (si es necesario) */}
+        {/* Botón para seleccionar productos (si hay) */}
         {productos.length > 0 && (
           <div style={{ position: "relative" }}>
             <button
@@ -78,52 +81,18 @@ const Header = ({ productos = [] }) => {
                 cursor: "pointer",
                 fontSize: "0.9rem",
                 fontWeight: "500",
-                transition: "all 0.3s ease",
-                ":hover": {
-                  backgroundColor: "rgba(255,255,255,0.2)",
-                  borderColor: "rgba(255,255,255,0.5)",
-                }
+                transition: "all 0.3s ease"
               }}
             >
               Seleccionar Producto ▼
             </button>
-            {/* Menú desplegable de productos */}
-            <div style={{
-              position: "absolute",
-              right: 0,
-              top: "100%",
-              backgroundColor: "#fff",
-              borderRadius: "8px",
-              boxShadow: "0 5px 15px rgba(0,0,0,0.1)",
-              minWidth: "200px",
-              zIndex: 1001,
-              padding: "10px 0",
-              display: "none" // Cambiar a 'block' cuando se muestre
-            }}>
-              {productos.map((producto) => (
-                <div 
-                  key={producto.id}
-                  onClick={() => handleProductoClick(producto)}
-                  style={{
-                    padding: "10px 20px",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                    ":hover": {
-                      backgroundColor: "#f5f5f5",
-                      color: "#005e97"
-                    }
-                  }}
-                >
-                  {producto.Nombre}
-                </div>
-              ))}
-            </div>
+            {/* Menú productos... (puedes implementar el menú aquí si lo necesitas) */}
           </div>
         )}
 
-        {/* Botón de Inicio (mantenido como original) */}
-       <button
-  onClick={() => navigate(-1)}
+        {/* Volver */}
+        <button
+          onClick={() => navigate(-1)}
           style={{
             padding: "10px 20px",
             backgroundColor: "transparent",
@@ -133,17 +102,13 @@ const Header = ({ productos = [] }) => {
             cursor: "pointer",
             fontSize: "0.9rem",
             fontWeight: "500",
-            transition: "all 0.3s ease",
-            ":hover": {
-              backgroundColor: "rgba(255,255,255,0.1)",
-              borderColor: "rgba(255,255,255,0.5)",
-            }
+            transition: "all 0.3s ease"
           }}
         >
           Volver
         </button>
 
-        {/* Botón de Cerrar Sesión (mantenido como original) */}
+        {/* Cerrar Sesión */}
         <button
           onClick={cerrarSesion}
           style={{
@@ -155,17 +120,13 @@ const Header = ({ productos = [] }) => {
             cursor: "pointer",
             fontSize: "0.9rem",
             fontWeight: "500",
-            transition: "all 0.3s ease",
-            ":hover": {
-              backgroundColor: "rgba(255,69,58,0.2)",
-              borderColor: "rgba(255,69,58,0.5)",
-            }
+            transition: "all 0.3s ease"
           }}
         >
           Cerrar Sesión
         </button>
 
-        {/* Contenedor del perfil */}
+        {/* Perfil */}
         <div
           className="profile-container"
           tabIndex={0}
@@ -189,11 +150,8 @@ const Header = ({ productos = [] }) => {
                 borderRadius: "50%",
                 objectFit: "cover",
                 border: "2px solid rgba(255,255,255,0.5)",
-                transition: "all 0.3s ease",
-                ":hover": {
-                  borderColor: "rgba(255,255,255,0.8)",
-                }
-              }} 
+                transition: "all 0.3s ease"
+              }}
             />
           ) : (
             <FaUserCircle 
@@ -201,15 +159,11 @@ const Header = ({ productos = [] }) => {
               color="#ffffff" 
               style={{ 
                 opacity: 0.8,
-                transition: "all 0.3s ease",
-                ":hover": {
-                  opacity: 1,
-                }
+                transition: "all 0.3s ease"
               }} 
             />
           )}
 
-          {/* Menú desplegable del perfil */}
           {menuVisible && (
             <div 
               style={{
@@ -233,11 +187,7 @@ const Header = ({ productos = [] }) => {
                   padding: "10px 20px",
                   color: "#333",
                   textDecoration: "none",
-                  transition: "all 0.2s ease",
-                  ":hover": {
-                    backgroundColor: "#f5f5f5",
-                    color: "#005e97",
-                  }
+                  transition: "all 0.2s ease"
                 }}
                 onClick={() => setMenuVisible(false)}
               >
@@ -249,17 +199,12 @@ const Header = ({ productos = [] }) => {
                   padding: "10px 20px",
                   color: "#333",
                   textDecoration: "none",
-                  transition: "all 0.2s ease",
-                  ":hover": {
-                    backgroundColor: "#f5f5f5",
-                    color: "#005e97",
-                  }
+                  transition: "all 0.2s ease"
                 }}
                 onClick={() => setMenuVisible(false)}
               >
                 Configuración
               </NavLink>
-             
             </div>
           )}
         </div>
@@ -268,6 +213,26 @@ const Header = ({ productos = [] }) => {
   );
 };
 
+// CSS global para el width responsivo del header
+const header2StyleSheet = `
+  @media (max-width: 600px) {
+    .header2-sermex {
+      width: 109% !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+  }
+  @media (min-width: 601px) {
+    .header2-sermex {
+      width: 101% !important;
+    }
+  }
+`;
+if (typeof window !== "undefined") {
+  const styleTag = document.getElementById("header2-global-style") || document.createElement("style");
+  styleTag.id = "header2-global-style";
+  styleTag.innerHTML = header2StyleSheet;
+  document.head.appendChild(styleTag);
+}
+
 export default Header;
-
-

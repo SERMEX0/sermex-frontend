@@ -193,7 +193,7 @@ const MainContainer = styled.div`
 
 // Header --- Logo y avatar alineados, responsivo
 const HeaderBar = styled.header`
-  width: 97%;
+  width: 96%;
   background: linear-gradient(90deg, #345475 78%, #4474B0 100%);
   color: #fff;
   display: flex;
@@ -348,7 +348,7 @@ const Subtitle = styled.p`
 `;
 
 const SearchWrap = styled.div`
-  margin: 0 auto 28px;
+  margin: 0 auto 27px;
   max-width: 360px;
   width: 100%;
 `;

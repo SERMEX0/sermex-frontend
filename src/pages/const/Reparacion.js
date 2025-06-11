@@ -4,6 +4,8 @@ import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+
 import "./Herader.css";
 import "./FormStyles.css";
 
@@ -518,6 +520,7 @@ function App() {
           </form>
         )}
       </div>
+      <Footer />
     </div>
   );
 }

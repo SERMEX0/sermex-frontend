@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import Header from "../../../components/Header2";
+import Footer from "../../../components/Footer";
 
 // 1. Diccionario de descripciones para cada estado
 const descripcionesEstado = {
@@ -127,7 +128,9 @@ const Logistica = () => {
       )}
       <Footer />
     </div>
+    
   );
+  
 };
 
 const styles = {
@@ -241,17 +244,5 @@ const styles = {
   }
 };
 
-const Footer = () => (
-  <footer style={{
-    backgroundColor: "#345475",
-    color: "#fff",
-    padding: "20px",
-    textAlign: "center",
-    marginTop: "auto",
-    width: "96%",
-  }}>
-    <p>© 2025 - Todos los derechos reservados</p>
-  </footer>
-);
 
 export default Logistica;

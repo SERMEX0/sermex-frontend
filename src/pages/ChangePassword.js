@@ -3,13 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import styled from "styled-components";
 import Header from "../components/Header2";
+import Footer from "../components/Footer";
 
 // Puedes copiar este Footer o usar el tuyo propio
-const Footer = () => (
-  <FooterStyled>
-    <p>© 2025 - Todos los derechos reservados</p>
-  </FooterStyled>
-);
+
 
 const ChangePassword = () => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -21,6 +18,7 @@ const ChangePassword = () => {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const navigate = useNavigate();
 
@@ -51,18 +49,18 @@ const ChangePassword = () => {
     setLoading(true);
 
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/change-password", {
-        method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({ 
-          currentPassword, 
-          newPassword 
-        }),
-      });
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${API_URL}/change-password`, {
+    method: "POST",
+    headers: { 
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify({ 
+      currentPassword, 
+      newPassword 
+    }),
+  });
 
       const data = await response.json();
 

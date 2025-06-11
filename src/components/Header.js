@@ -3,16 +3,8 @@ import { FaTools, FaBoxOpen, FaChartLine, FaUserCircle } from "react-icons/fa";
 import { useState, useEffect } from "react";
 
 /**
- * Header institucional, limpio, con detalles modernos y profesional:
- * - Logo grande y con sombra sutil, clickable.
- * - Navegación centrada, con íconos y efecto "pill" en el activo.
- * - Botones de acción tal como pediste: conservan el estilo y forma, ajustados para armonía visual.
- * - Avatar circular con sombra, borde animado al hover, menú desplegable suave y profesional.
- * - Responsive hasta 900px para que no colapse ni se vea sobrecargado.
- * - Efectos sutiles y transiciones para dar sensación de aplicación moderna.
- * - Sin dependencias externas, solo CSS inline y un pequeño bloque de CSS global.
- * 
- * Puedes mover los estilos globales a tu CSS si lo prefieres, pero aquí están listos para copiar y pegar.
+ * Header institucional, limpio, con detalles modernos y profesional.
+ * Responsive: el ancho se adapta (101% en móvil, 97% en desktop).
  */
 
 const Header = ({ productos = [] }) => {
@@ -47,7 +39,7 @@ const Header = ({ productos = [] }) => {
   };
 
   return (
-    <header style={styles.header}>
+    <header className="header-sermex" style={styles.header}>
       {/* Logo */}
       <div style={{ display: "flex", alignItems: "center" }}>
         <img
@@ -122,7 +114,6 @@ const Header = ({ productos = [] }) => {
           </div>
         )}
 
-        {/* Botones principales (sin cambios funcionales, solo armonía visual) */}
         <button
           onClick={() => navigate("/inicio")}
           style={styles.primaryButton}
@@ -183,7 +174,7 @@ const Header = ({ productos = [] }) => {
 
 const styles = {
   header: {
-    width: "97%",
+    width: "97%", // valor por defecto
     maxWidth: "1500px",
     margin: "0 auto",
     background: "linear-gradient(90deg, #345475 78%, #4474B0 100%)",
@@ -250,7 +241,7 @@ const styles = {
     padding: "10px 18px",
     background: "rgba(255,255,255,0.11)",
     color: "#fff",
-    border: "1px solid rgba(255,255,255,0.27)",
+    border: "3px solid rgba(255,255,255,0.27)",
     borderRadius: "30px",
     cursor: "pointer",
     fontSize: "0.97rem",
@@ -364,6 +355,7 @@ const styles = {
 };
 
 // Animaciones y hover globales para menú y botones (puedes mover esto a tu CSS global)
+// Incluye la media query para el width responsivo
 const globalHeaderCSS = `
 @keyframes fadeInMenu {
   from { opacity: 0; transform: translateY(10px);}
@@ -387,8 +379,21 @@ const globalHeaderCSS = `
   background: #f2f6ff;
   color: #345475;
 }
+/* RESPONSIVE HEADER WIDTH */
+@media (max-width: 600px) {
+  .header-sermex {
+    width: 101% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+@media (min-width: 601px) {
+  .header-sermex {
+    width: 97% !important;
+  }
+}
 @media (max-width: 900px) {
-  header {
+  .header-sermex {
     flex-direction: column !important;
     align-items: stretch !important;
     padding: 8px 4vw !important;

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const FooterContainer = styled.footer`
-  width: 105%;
+  width: 110%;
   background-color: #345475;
   color: #ffffff;
   text-align: center;
@@ -35,10 +35,8 @@ const partnerLogos = [
   { src: "/images/milesight.png", alt: "Milesight logo" },
   { src: "/images/flir.png", alt: "FLIR logo" },
   { src: "/images/eagle.png", alt: "Eagle logo" },
-  { src: "/images/density.png", alt: "Density logo" },
   { src: "/images/ceia.png", alt: "CEIA logo" },
   { src: "/images/flexradio.png", alt: "FlexRadio logo" },
-  { src: "/images/id3.png", alt: "ID3 logo" },
   { src: "/images/or-technology.png", alt: "OR Technology logo" },
   { src: "/images/trafictec.png", alt: "Trafictec logo" },
   { src: "/images/louroe.png", alt: "Louroe logo" },

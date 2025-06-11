@@ -4,6 +4,8 @@ import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
 import { useNavigate } from "react-router-dom";
 import Header from "../../../components/Header2";
+import Footer from "../../../components/Footer";
+
 
 
 import{FaTruck,
@@ -19,7 +21,7 @@ function App() {
   const [documentGenerated, setDocumentGenerated] = useState(false);
   const [documentBlob, setDocumentBlob] = useState(null);
   const [images, setImages] = useState([]); // Para almacenar las imágenes subidas
-
+const API_URL = process.env.REACT_APP_API_URL;
 
   
   // Lista de vendedores
@@ -171,12 +173,12 @@ function App() {
       }
   
       // Enviar al servidor
-      const response = await fetch('http://localhost:5000/api/enviar-garantia', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
+const response = await fetch(`${API_URL}/api/enviar-garantia`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  },
         body: JSON.stringify({
           vendedorEmail: vendedores.find(v => v.id === selectedVendedor).email,
           datosFormulario: formData,
@@ -501,6 +503,7 @@ function App() {
           </form>
         )}
       </div>
+      <Footer />
     </div>
   );
 }
