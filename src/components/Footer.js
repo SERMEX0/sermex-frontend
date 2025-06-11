@@ -1,7 +1,22 @@
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 
-const FooterContainer = styled.footer`
-  width: 110%;
+const ResponsiveFooterWidth = createGlobalStyle`
+  @media (max-width: 600px) {
+    .footer-sermex {
+      width: 108% !important;
+    }
+  }
+  @media (min-width: 601px) {
+    .footer-sermex {
+      width: 97% !important;
+    }
+  }
+`;
+
+const FooterContainer = styled.footer.attrs(() => ({
+  className: 'footer-sermex'
+}))`
+  width: 97%;
   background-color: #345475;
   color: #ffffff;
   text-align: center;
@@ -44,19 +59,22 @@ const partnerLogos = [
 
 const Footer = () => {
   return (
-    <FooterContainer>
-      <p>© 2025 En Proceso de Certificación ISO 9001:2015.</p>
-      <LogoGrid>
-        {partnerLogos.map((logo, index) => (
-          <Logo 
-            key={index}
-            src={logo.src}
-            alt={logo.alt}
-            loading="lazy"
-          />
-        ))}
-      </LogoGrid>
-    </FooterContainer>
+    <>
+      <ResponsiveFooterWidth />
+      <FooterContainer>
+        <p>© 2025 En Proceso de Certificación ISO 9001:2015.</p>
+        <LogoGrid>
+          {partnerLogos.map((logo, index) => (
+            <Logo 
+              key={index}
+              src={logo.src}
+              alt={logo.alt}
+              loading="lazy"
+            />
+          ))}
+        </LogoGrid>
+      </FooterContainer>
+    </>
   );
 };
 

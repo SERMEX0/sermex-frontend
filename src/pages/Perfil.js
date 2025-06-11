@@ -3,6 +3,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
+
 /**
  * MEJORA DE ESTILO Y DISEÑO:
  * - Uso de diseño más limpio y profesional con una sola card principal centrada
@@ -20,8 +21,6 @@ const Perfil = () => {
   );
   const navigate = useNavigate();
 
-  
-
   const handleImagenChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -35,113 +34,140 @@ const Perfil = () => {
   };
 
   return (
-    <div style={styles.root}>
-      {/* Header */}
-      <header style={headerStyles.container}>
-        <div style={headerStyles.logoContainer}>
-          <img
-            src="/logo_SERMEX_blanco.fw.png"
-            alt="Logo"
-            style={headerStyles.logo}
-            onClick={() => navigate("/inicio")}
-          />
-        </div>
-        <div style={headerStyles.buttonsContainer}>
-          <button
-            onClick={() => navigate(-1)}
-            style={headerStyles.navButton}
-          >
-            Volver
-          </button>
-          
-          <div style={headerStyles.profileContainer}>
-            {imagenPerfil ? (
-              <img
-                src={imagenPerfil}
-                alt="Perfil"
-                style={headerStyles.profileImage}
-              />
-            ) : (
-              <FaUserCircle size={45} color="#ffffff" style={headerStyles.profileIcon} />
-            )}
-          </div>
-        </div>
-      </header>
-
-      {/* Contenido principal */}
-      <main style={styles.container}>
-        <div style={styles.profileCard}>
-          {/* Foto y nombre */}
-          <div style={styles.avatarSection}>
-            <div
-              style={styles.avatarWrapper}
-              tabIndex={0}
-              title="Haz clic para cambiar foto"
-            >
-              <img
-                src={imagenPerfil || "/logo_SERMEX_azul.fw.png"}
-                alt="Foto de perfil"
-                style={styles.avatar}
-              />
-              <label htmlFor="fileInput" style={styles.uploadOverlay}>
-                <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                  style={{ marginBottom: 4 }}>
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <polyline points="17 8 12 3 7 8"></polyline>
-                  <line x1="12" y1="3" x2="12" y2="15"></line>
-                </svg>
-                <span style={styles.uploadText}>Cambiar foto</span>
-                <input
-                  id="fileInput"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImagenChange}
-                  style={styles.fileInput}
-                />
-              </label>
-            </div>
-            <h2 style={styles.title}>Configuración de Perfil</h2>
-            <p style={styles.subtitle}>Haz clic sobre la imagen para actualizar tu foto de perfil.</p>
-          </div>
-
-          {/* Acciones */}
-          <div style={styles.buttonGroup}>
-            <button
-              style={styles.primaryButton}
+    <>
+      <ResponsivePerfilWidth />
+      <div style={styles.root}>
+        {/* Header */}
+        <header className="perfil-header" style={headerStyles.container}>
+          <div style={headerStyles.logoContainer}>
+            <img
+              src="/logo_SERMEX_blanco.fw.png"
+              alt="Logo"
+              style={headerStyles.logo}
               onClick={() => navigate("/inicio")}
-            >
-              Guardar Cambios
-            </button>
+            />
+          </div>
+          <div style={headerStyles.buttonsContainer}>
             <button
-              style={styles.secondaryButton}
               onClick={() => navigate(-1)}
+              style={headerStyles.navButton}
             >
-              Cancelar
+              Volver
             </button>
+            <div style={headerStyles.profileContainer}>
+              {imagenPerfil ? (
+                <img
+                  src={imagenPerfil}
+                  alt="Perfil"
+                  style={headerStyles.profileImage}
+                />
+              ) : (
+                <FaUserCircle size={45} color="#ffffff" style={headerStyles.profileIcon} />
+              )}
+            </div>
           </div>
+        </header>
 
-          {/* Cambiar contraseña */}
-          <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>Contraseña</h3>
-            <p style={styles.subtitle}>Actualiza tu contraseña para mantener tu cuenta segura.</p>
-            <button
-              onClick={() => navigate('/change-password')}
-              style={styles.passwordButton}
-            >
-              Cambiar Contraseña
-            </button>
+        {/* Contenido principal */}
+        <main style={styles.container}>
+          <div style={styles.profileCard}>
+            {/* Foto y nombre */}
+            <div style={styles.avatarSection}>
+              <div
+                style={styles.avatarWrapper}
+                tabIndex={0}
+                title="Haz clic para cambiar foto"
+                className="perfil-avatar-wrapper"
+              >
+                <img
+                  src={imagenPerfil || "/logo_SERMEX_azul.fw.png"}
+                  alt="Foto de perfil"
+                  style={styles.avatar}
+                />
+                <label htmlFor="fileInput" style={styles.uploadOverlay}>
+                  <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                    style={{ marginBottom: 4 }}>
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                  <span style={styles.uploadText}>Cambiar foto</span>
+                  <input
+                    id="fileInput"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImagenChange}
+                    style={styles.fileInput}
+                  />
+                </label>
+              </div>
+              <h2 style={styles.title}>Configuración de Perfil</h2>
+              <p style={styles.subtitle}>Haz clic sobre la imagen para actualizar tu foto de perfil.</p>
+            </div>
+
+            {/* Acciones */}
+            <div style={styles.buttonGroup}>
+              <button
+                style={styles.primaryButton}
+                onClick={() => navigate("/inicio")}
+              >
+                Guardar Cambios
+              </button>
+              <button
+                style={styles.secondaryButton}
+                onClick={() => navigate(-1)}
+              >
+                Cancelar
+              </button>
+            </div>
+
+            {/* Cambiar contraseña */}
+            <div style={styles.section}>
+              <h3 style={styles.sectionTitle}>Contraseña</h3>
+              <p style={styles.subtitle}>Actualiza tu contraseña para mantener tu cuenta segura.</p>
+              <button
+                onClick={() => navigate('/change-password')}
+                style={styles.passwordButton}
+              >
+                Cambiar Contraseña
+              </button>
+            </div>
           </div>
-        </div>
-      </main>
+        </main>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </>
   );
+};
+
+// Responsive width for header
+const ResponsivePerfilWidth = () => {
+  if (typeof window === "undefined") return null;
+  const styleTagId = "perfil-header-width-css";
+  if (!document.getElementById(styleTagId)) {
+    const styleTag = document.createElement("style");
+    styleTag.id = styleTagId;
+    styleTag.innerHTML = `
+      @media (max-width: 600px) {
+        .perfil-header {
+          width: 95% !important;
+        }
+      }
+      @media (min-width: 601px) {
+        .perfil-header {
+          width: 97% !important;
+        }
+      }
+    `;
+    document.head.appendChild(styleTag);
+  }
+  return null;
 };
 
 const headerStyles = {
   container: {
-    width: "97%",
+    width: "95%",
     background: "linear-gradient(90deg, #345475 70%, #4474B0 100%)",
     color: "#fff",
     display: "flex",
@@ -153,6 +179,7 @@ const headerStyles = {
     top: 0,
     zIndex: 10,
     boxShadow: "0 2px 16px rgba(0,0,0,0.03)",
+    margin: "0 auto"
   },
   logoContainer: {
     display: "flex",
@@ -388,8 +415,5 @@ if (typeof window !== "undefined") {
   styleTag.innerHTML = styleSheet;
   document.head.appendChild(styleTag);
 }
-
-// Footer elegante y fijo
-
 
 export default Perfil;

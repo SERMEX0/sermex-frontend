@@ -27,7 +27,7 @@ const Header = () => {
     <>
       <style>{`
         .sermex-header {
-          width: 99%;
+          width: 102%;
           max-width: 1500px;
           margin: 0 auto;
           background-color: #345475;
@@ -153,20 +153,9 @@ const Header = () => {
           {menuVisible && (
             <div className="sermex-profile-menu">
               {/* Input oculto para subir imagen */}
-              <label className="sermex-profile-link" htmlFor="upload-photo">
-                Cambiar foto de perfil
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  id="upload-photo"
-                />
-              </label>
+              
               <NavLink to="/perfil" className="sermex-profile-link">
                 Mi Perfil
-              </NavLink>
-              <NavLink to="/configuracion" className="sermex-profile-link">
-                Configuración
               </NavLink>
               <NavLink to="/" className="sermex-profile-link logout">
                 Cerrar Sesión
@@ -195,7 +184,7 @@ const Inicio = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          width: "104%",
+          width: "107%",
         }}
       >
         {/* Video de fondo */}

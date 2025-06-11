@@ -157,13 +157,7 @@ const Header = ({ productos = [] }) => {
               >
                 Mi Perfil
               </NavLink>
-              <NavLink
-                to="/configuracion"
-                style={styles.profileMenuItem}
-                onClick={() => setMenuVisible(false)}
-              >
-                Configuración
-              </NavLink>
+              
             </div>
           )}
         </div>

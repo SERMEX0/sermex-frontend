@@ -20,7 +20,7 @@ const Header = ({ productos = [] }) => {
 
   return (
     <header className="header2-sermex" style={{
-      width: "101%", // Por defecto, escritorio/tablet
+      width: "107%", // Por defecto, escritorio/tablet
       maxWidth: "1500px",
       background: "linear-gradient(90deg, #345475 70%, #4474B0 100%)",
       color: "#fff",
@@ -162,18 +162,7 @@ const Header = ({ productos = [] }) => {
               >
                 Mi Perfil
               </NavLink>
-              <NavLink 
-                to="/configuracion" 
-                style={{
-                  padding: "10px 20px",
-                  color: "#333",
-                  textDecoration: "none",
-                  transition: "all 0.2s ease"
-                }}
-                onClick={() => setMenuVisible(false)}
-              >
-                Configuración
-              </NavLink>
+              
             </div>
           )}
         </div>
