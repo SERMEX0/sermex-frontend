@@ -16,6 +16,7 @@ import Rma from "./pages/const/data/Rma";
 import ChangePassword from "./pages/ChangePassword";
 import AuthWrapper from "./components/AuthWrapper";
 import SessionChecker from "./components/SessionChecker";
+import DataResult from "./pages/DataResult";
 
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
          <Route path="/logistica" element={<Logistica />} />
          
          <Route path="/rma" element={<Rma />} />
+         <Route path="/data-result" element={<DataResult />} />
           
 
         {/* Redirige al login si no hay ninguna ruta coincidente */}
