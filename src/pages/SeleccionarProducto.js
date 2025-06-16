@@ -193,7 +193,7 @@ const MainContainer = styled.div`
 
 // Header --- Logo y avatar alineados, responsivo
 const HeaderBar = styled.header`
-  width: 96%;
+  width: 97%;
   background: linear-gradient(90deg, #345475 78%, #4474B0 100%);
   color: #fff;
   display: flex;

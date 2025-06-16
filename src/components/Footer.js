@@ -8,7 +8,7 @@ const ResponsiveFooterWidth = createGlobalStyle`
   }
   @media (min-width: 601px) {
     .footer-sermex {
-      width: 97% !important;
+      width: 108% !important;
     }
   }
 `;
