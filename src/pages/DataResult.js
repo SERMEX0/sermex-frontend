@@ -130,7 +130,7 @@ export default function DataResult({ correo }) {
             datasets: [{
               data: motivoValues,
               backgroundColor: [
-                "#f7b731", "#fd9644", "#3867d6", "#26de81", "#a55eea", "#eb3b5a", "#45aaf2", "#888"
+                "#eb3b5a", "#45aaf2", "#26de81", "#3867d6", "#a55eea", "#f7b731", "#888", "#fd9644"
               ]
             }]
           }}
@@ -146,7 +146,7 @@ export default function DataResult({ correo }) {
             datasets: [
               {
                 data: countByEstado,
-                backgroundColor: ["#f7b731", "#fd9644", "#3867d6", "#26de81"],
+                backgroundColor: ["#eb3b5a", "#45aaf2", "#26de81", "#a55eea"],
               },
             ],
           }}
@@ -181,8 +181,8 @@ export default function DataResult({ correo }) {
               {
                 label: "RMAs creados",
                 data: fechasSorted.map(([, c]) => c),
-                borderColor: "#fd9644",
-                backgroundColor: "rgba(253, 150, 68, 0.2)",
+                borderColor: "#45aaf2",
+                backgroundColor: "rgba(99, 139, 219, 0.2)",
                 fill: true,
                 tension: 0.2,
               },
