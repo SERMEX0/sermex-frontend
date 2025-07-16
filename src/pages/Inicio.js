@@ -267,7 +267,7 @@ const Inicio = () => {
       <style>{`
         @media (min-width: 1024px) {
           .sermex-footer {
-            margin-top: 60px !important; /* Solo en escritorio, baja el footer */
+            margin-top: 90px !important; /* Solo en escritorio, baja el footer */
           }
         }
       `}</style>
