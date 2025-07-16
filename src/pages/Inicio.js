@@ -61,7 +61,9 @@ const Header = () => {
           object-fit: cover;
           border: 2px solid #fff;
           background: #eaeaea;
-          transition: box-shadow 0.2s, border-color 0.2s;
+          transition: box-shadow 0.2s, border-color 0.2s, left 0.2s;
+          position: relative;
+          left: 0;
         }
         .sermex-profile-avatar:hover {
           border-color: #4474B0;
@@ -105,6 +107,10 @@ const Header = () => {
           from { opacity: 0; transform: translateY(10px);}
           to { opacity: 1; transform: translateY(0);}
         }
+
+        /* ----------- AJUSTES RESPONSIVE SOLICITADOS ----------- */
+
+        /* SOLO en móvil: mueve la imagen de perfil a la izquierda */
         @media (max-width: 700px) {
           .sermex-header {
             padding: 6px 3vw;
@@ -116,6 +122,7 @@ const Header = () => {
           .sermex-profile-avatar {
             width: 52px;
             height: 52px;
+            left: -13px; /* mueve un poco a la izquierda SOLO en móvil */
           }
           .sermex-profile-menu {
             top: 38px;
@@ -153,7 +160,6 @@ const Header = () => {
           {menuVisible && (
             <div className="sermex-profile-menu">
               {/* Input oculto para subir imagen */}
-              
               <NavLink to="/perfil" className="sermex-profile-link">
                 Mi Perfil
               </NavLink>
@@ -256,7 +262,15 @@ const Inicio = () => {
           </div>
         </div>
       </div>
+      {/* El Footer se ajusta abajo solo en escritorio */}
       <Footer />
+      <style>{`
+        @media (min-width: 1024px) {
+          .sermex-footer {
+            margin-top: 60px !important; /* Solo en escritorio, baja el footer */
+          }
+        }
+      `}</style>
     </div>
   );
 };
