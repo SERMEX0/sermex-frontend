@@ -158,16 +158,24 @@ const Header = () => {
 
           {/* Menú desplegable */}
           {menuVisible && (
-            <div className="sermex-profile-menu">
-              {/* Input oculto para subir imagen */}
-              <NavLink to="/perfil" className="sermex-profile-link">
-                Mi Perfil
-              </NavLink>
-              <NavLink to="/" className="sermex-profile-link logout">
-                Cerrar Sesión
-              </NavLink>
-            </div>
-          )}
+  <div className="sermex-profile-menu">
+    <NavLink to="/perfil" className="sermex-profile-link">
+      Mi Perfil
+    </NavLink>
+    <button
+      className="sermex-profile-link logout"
+      onClick={() => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        localStorage.removeItem("fotoPerfil");
+        window.location.href = "/login";
+        setMenuVisible(false);
+      }}
+    >
+      Cerrar Sesión
+    </button>
+  </div>
+)}
         </div>
       </header>
     </>

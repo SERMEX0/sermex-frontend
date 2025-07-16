@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Inicio from "./pages/Inicio";
+import ProtectedRoute from "./pages/ProtectedRoute";
 import PrivateRoute from "./PrivateRoute";
 import SeleccionarProducto from "./pages/SeleccionarProducto";
 import ProductDetail from "./pages/ProductDetail"; // Importamos la nueva pantalla
@@ -28,6 +29,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         {/* 🔒 Protegemos la pantalla de inicio */}
         <Route path="/inicio" element={<PrivateRoute><Inicio /></PrivateRoute>} />
+        <Route path="/protectedRoute" element={<ProtectedRoute />}/>
         <Route path="/seleccionar-producto" element={<SeleccionarProducto />} />  {/* ✅ Ruta correcta */}
         <Route path="/authWrapper" element={<AuthWrapper />}/>
         <Route path="/sessionChecker" element={<SessionChecker />}/>

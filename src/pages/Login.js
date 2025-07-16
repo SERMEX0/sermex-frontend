@@ -32,9 +32,8 @@ const Login = () => {
     
     // ESTA ES LA PARTE QUE DEBES AÑADIR/MODIFICAR:
     localStorage.setItem("token", data.token);
-    sessionStorage.setItem("token", data.token);
     localStorage.setItem("user", JSON.stringify(data.user));
-    sessionStorage.setItem("user", JSON.stringify(data.user));
+    
     
     navigate("/inicio");
   } catch (err) {
