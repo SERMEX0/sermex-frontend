@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Header from "../../components/Header2";
 import Footer from "../../components/Footer";
+const API_URL = process.env.REACT_APP_API_URL;
 
 const PantallaSimple = () => {
   const [form, setForm] = useState({
@@ -34,14 +35,13 @@ const PantallaSimple = () => {
   try {
     console.log("Enviando datos:", form);
     
-    const response = await fetch('http://localhost:5000/api/enviar-contacto', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(form)
-    });
-
+    const response = await fetch(`${API_URL}/api/enviar-contacto`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(form)
+});
     console.log("Response status:", response.status);
     
     const text = await response.text();
