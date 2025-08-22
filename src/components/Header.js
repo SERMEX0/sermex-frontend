@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { FaTools, FaBoxOpen, FaChartLine, FaUserCircle } from "react-icons/fa";
+import { FaTools, FaBoxOpen, FaChartLine, FaUserCircle, FaBook, FaTruck } from "react-icons/fa";
 import { useState, useEffect } from "react";
 
 /**
@@ -52,37 +52,50 @@ const Header = ({ productos = [] }) => {
 
       {/* Navegación */}
       <nav style={styles.nav}>
-        <NavLink
-          to="/detalle-producto"
-          style={({ isActive }) => ({
-            ...styles.navLink,
-            ...(isActive ? styles.navLinkActive : {}),
-          })}
-        >
-          <FaBoxOpen style={styles.navIcon} />
-          Producto
-        </NavLink>
-        <NavLink
-          to="/manual"
-          style={({ isActive }) => ({
-            ...styles.navLink,
-            ...(isActive ? styles.navLinkActive : {}),
-          })}
-        >
-          <FaChartLine style={styles.navIcon} />
-          Manual de uso
-        </NavLink>
-        <NavLink
-          to="/reparacion"
-          style={({ isActive }) => ({
-            ...styles.navLink,
-            ...(isActive ? styles.navLinkActive : {}),
-          })}
-        >
-          <FaTools style={styles.navIcon} />
-          Reportes
-        </NavLink>
-      </nav>
+  <NavLink
+    to="/detalle-producto"
+    style={({ isActive }) => ({
+      ...styles.navLink,
+      ...(isActive ? styles.navLinkActive : {}),
+    })}
+  >
+    <FaBoxOpen style={styles.navIcon} />
+    Producto
+  </NavLink>
+
+  <NavLink
+    to="/tutorial"
+    style={({ isActive }) => ({
+      ...styles.navLink,
+      ...(isActive ? styles.navLinkActive : {}),
+    })}
+  >
+    <FaBook style={styles.navIcon} />
+    Tutorial
+  </NavLink>
+
+  <NavLink
+    to="/manual"
+    style={({ isActive }) => ({
+      ...styles.navLink,
+      ...(isActive ? styles.navLinkActive : {}),
+    })}
+  >
+    <FaTools style={styles.navIcon} />
+    Mantenimiento y garantía
+  </NavLink>
+
+  <NavLink
+    to="/logistica"
+    style={({ isActive }) => ({
+      ...styles.navLink,
+      ...(isActive ? styles.navLinkActive : {}),
+    })}
+  >
+    <FaTruck style={styles.navIcon} />
+    Seguimiento a reporte
+  </NavLink>
+</nav>
 
       {/* Acciones y perfil */}
       <div style={styles.actions}>

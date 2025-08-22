@@ -218,24 +218,7 @@ function App() {
             <h2 style={styles.title}>Formulario de Garantía</h2>
             <p style={styles.subtitle}>Complete todos los campos obligatorios</p>
           </div>
-          <button
-    onClick={() => navigate("/logistica")}
-    style={{
-      padding: "10px 20px",
-      fontSize: "1rem",
-      cursor: "pointer",
-      backgroundColor: "#fff",
-      color: "#345475",
-      border: "none",
-      borderRadius: "5px",
-      marginTop: "15px",
-      transition: "background-color 0.3s ease",
-    }}
-    onMouseOver={(e) => (e.target.style.backgroundColor = "#ddd")}
-    onMouseOut={(e) => (e.target.style.backgroundColor = "#fff")}
-  >
-  <FaTruck />  ver estado de reparacion
-  </button>
+          
 
         </div>
         

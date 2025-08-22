@@ -119,14 +119,32 @@ const SeleccionarProducto = () => {
           </StatusBox>
         ) : filteredProducts.length > 0 ? (
           <ProductGrid>
-            {filteredProducts.map((producto, index) => (
-              <ProductCard
-                key={`${producto.Nombre}-${index}`}
-                producto={producto}
-                onClick={() => seleccionarProducto(producto)}
-              />
-            ))}
-          </ProductGrid>
+  {filteredProducts.map((producto, index) => (
+    <ProductCard
+      key={`${producto.Nombre}-${index}`}
+      producto={producto}
+      onClick={() => seleccionarProducto(producto)}
+    />
+  ))}
+  {/* TARJETA BOTÓN OTRO */}
+  <ProductCardBox
+    onClick={() => navigate("/FormDoc")}
+    $hovered={false}
+    style={{ border: '2.5px dashed #4474B0', background: '#f2f7fe', minHeight: 210, alignItems: 'center', justifyContent: 'center'}}
+  >
+    <ProductImgWrap>
+      <ProductImg 
+        src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png"
+        alt="Otro producto"
+        style={{ objectFit: 'contain', filter: 'grayscale(0.5)', opacity: 0.7, background: 'none' }}
+      />
+    </ProductImgWrap>
+    <ProductCardBody style={{alignItems: "center"}}>
+      <ProductTitle>Otro</ProductTitle>
+      <ViewBtn>Cuento con otro producto</ViewBtn>
+    </ProductCardBody>
+  </ProductCardBox>
+</ProductGrid>
         ) : (
           <EmptyState>
             <ClearBtn onClick={() => setSearchTerm("")}>Limpiar búsqueda</ClearBtn>

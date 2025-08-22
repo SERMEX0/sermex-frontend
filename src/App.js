@@ -8,16 +8,21 @@ import ProductDetail from "./pages/ProductDetail"; // Importamos la nueva pantal
 import Reparacion from "./pages/const/Reparacion"; //pantallas principales
 import Productos from "./pages/const/Productos";
 import Manual from "./pages/const/Manual";
+import Tutorial from "./pages/const/Tutorial";
 import ProductEvaluation from "./pages/const/ProductEvaluation";
 import Perfil from "./pages/Perfil";
 //import Header from "./components/Header";
 import Logistica from "./pages/const/data/Logistica";
+import Logistica1 from "./pages/const/Logistica1";
 
 import Rma from "./pages/const/data/Rma";
+import FormDoc from "./pages/const/data/FormDoc";
+import ProductDocs from "./pages/const/data/ProductDocs";
 import ChangePassword from "./pages/ChangePassword";
 import AuthWrapper from "./components/AuthWrapper";
 import SessionChecker from "./components/SessionChecker";
 import DataResult from "./pages/DataResult";
+import Asesoria from "./pages/const/Asesoria";
 
 
 function App() {
@@ -39,12 +44,17 @@ function App() {
         <Route path="/reparacion" element={<Reparacion />} />
         <Route path="/productos" element={<Productos />} />
         <Route path="/manual" element={<Manual />} />
+        <Route path="/tutorial" element={<Tutorial />} />
+        <Route path="/asesoria" element={<Asesoria />} />
         <Route path="/producto/:productId/evaluar" element={<ProductEvaluation />} />
         
          {/* Nuevas rutas */}
          <Route path="/logistica" element={<Logistica />} />
+         <Route path="/logistica1" element={<Logistica1 />} />
          
          <Route path="/rma" element={<Rma />} />
+         <Route path="/formdoc" element={<FormDoc />} />
+         <Route path="/productdocs" element={<ProductDocs />} />
          <Route path="/data-result" element={<DataResult />} />
           
 

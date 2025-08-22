@@ -1,13 +1,14 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import { FaTools, FaCalendarAlt, FaLifeRing, FaWrench } from "react-icons/fa";
+import { FaUserCog, FaVideo, FaLifeRing } from "react-icons/fa";
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import styled, { keyframes } from "styled-components";
 
-const Manual = () => {
+const Tutorial = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [producto, setProducto] = useState(null);
@@ -78,7 +79,7 @@ const Manual = () => {
             />
           ) : (
             <ImagePlaceholder>
-              <FaTools size={52} />
+              <FaUserCog size={52} />
               <span>Imagen no disponible</span>
             </ImagePlaceholder>
           )}
@@ -106,133 +107,37 @@ const Manual = () => {
             )}
           </HeroInfo>
           <HeroDesc>
-            Recibe asesoria o mantenimiento para tu producto. 
+            Tutoriales del producto.
           </HeroDesc>
         </HeroDetails>
-        <SoporteBtn
-          title="Soporte rápido"
-          onClick={() => window.open('mailto:info@sermex.mx', '_blank')}
-        >
-          <FaLifeRing size={20} /> Solicitar soporte por correo
-        </SoporteBtn>
+        
       </HeroSection>
 
       <FadeSection>
         <CardsFlex>
-          <InfoCardVibrant
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              minHeight: "400px",
-            }}
-          >
-            <div>
-              <SectionTitle>
-                <FaTools /> Mantenimiento
-                <Badge preventivo>PREVENTIVO</Badge>
-              </SectionTitle>
-              <InfoSubtitle>
-                Pruebas antes de solicitar mantenimiento
-              </InfoSubtitle>
-              <InfoText>
-                {Array.isArray(producto["Mantenimiento preventivo"]) ? (
-                  <ul>
-                    {producto["Mantenimiento preventivo"].map((item, index) => (
-                      <li key={index}>{item}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p>
-                    {producto["Mantenimiento preventivo"] || "No hay información específica disponible sobre mantenimiento preventivo para este producto."}
-                  </p>
-                )}
-              </InfoText>
-              {producto["Frecuencia mantenimiento"] && (
+          <InfoCardVibrant style={{ maxWidth: 540, margin: "0 auto" }}>
+            <SectionTitle>
+              <FaUserCog /> Tutorial del producto
+              <Badge tutorial>TUTORIAL</Badge>
+            </SectionTitle>
+            <InfoText>
+              {producto["Soporte y mantenimiento"] || "Para asistencia técnica con este producto, por favor contacte a nuestro equipo de soporte."}
+            </InfoText>
+            {producto.Video && (
+              <VideoSection>
                 <DetailItem>
-                  <FaCalendarAlt style={{ marginRight: 7, color: "#10b981" }} />
-                  <span><strong>Frecuencia:</strong> {producto["Frecuencia mantenimiento"]}</span>
+                  <FaVideo style={{ marginRight: 8, color: "#10b981" }} />
+                  <span><strong>Video tutorial</strong></span>
                 </DetailItem>
-              )}
-            </div>
-
-            <div style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
-              <button
-                onClick={() => navigate("/asesoria")}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "10px 20px",
-                  fontSize: "1rem",
-                  cursor: "pointer",
-                  backgroundColor: "#10b981",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "8px",
-                  transition: "background-color 0.3s ease",
-                }}
-                onMouseOver={(e) => (e.target.style.backgroundColor = "#0d946a")}
-                onMouseOut={(e) => (e.target.style.backgroundColor = "#10b981")}
-              >
-                <FaLifeRing /> Solicitar asesoría
-              </button>
-            </div>
-          </InfoCardVibrant>
-
-          <CardSeparator>
-            <FaTools size={38} color="#60a5fa" />
-          </CardSeparator>
-
-          <InfoCardVibrant
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              minHeight: "400px",
-            }}
-          >
-            <div>
-              <SectionTitle>
-                <FaTools /> Mantenimiento
-                <Badge correctivo>CORRECTIVO</Badge>
-              </SectionTitle>
-              <InfoSubtitle>
-                Si tu equipo sigue fallando, ofrecemos soporte técnico.
-              </InfoSubtitle>
-              <InfoText>
-                {producto["Mantenimiento correctivo"] || "No hay información específica disponible sobre mantenimiento correctivo para este producto."}
-              </InfoText>
-              {producto["Tiempo respuesta"] && (
-                <DetailItem>
-                  <FaCalendarAlt style={{ marginRight: 7, color: "#3b82f6" }} />
-                  <span><strong>Respuesta:</strong> {producto["Tiempo respuesta"]}</span>
-                </DetailItem>
-              )}
-            </div>
-
-            <div style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
-              <button
-                onClick={() => navigate("/reparacion")}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "10px 20px",
-                  fontSize: "1rem",
-                  cursor: "pointer",
-                  backgroundColor: "#3b82f6",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "8px",
-                  transition: "background-color 0.3s ease",
-                }}
-                onMouseOver={(e) => (e.target.style.backgroundColor = "#316fd4")}
-                onMouseOut={(e) => (e.target.style.backgroundColor = "#3b82f6")}
-              >
-                <FaWrench /> Solicitar reparación
-              </button>
-            </div>
+                <VideoLink
+                  href={producto.Video}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Ver video tutorial del producto
+                </VideoLink>
+              </VideoSection>
+            )}
           </InfoCardVibrant>
         </CardsFlex>
       </FadeSection>
@@ -241,9 +146,9 @@ const Manual = () => {
   );
 };
 
-export default Manual;
+export default Tutorial;
 
-// Estilos (los mismos que en el código original)
+// Estilos (los mismos que en Manual.js)
 const fadeUp = keyframes`
   from { opacity: 0; transform: translateY(40px);}
   to { opacity: 1; transform: translateY(0);}
@@ -462,16 +367,6 @@ const InfoCardVibrant = styled.div`
   }
 `;
 
-const CardSeparator = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 60px;
-  @media (max-width: 950px) {
-    display: none;
-  }
-`;
-
 const Badge = styled.span`
   margin-left: 16px;
   font-size: 0.85rem;
@@ -507,17 +402,6 @@ const SectionTitle = styled.h3`
   }
 `;
 
-const InfoSubtitle = styled.h4`
-  font-size: 1.06rem;
-  color: #345475;
-  font-weight: 500;
-  margin-bottom: 13px;
-  @media (max-width: 600px) {
-    font-size: 0.95rem;
-    margin-bottom: 7px;
-  }
-`;
-
 const InfoText = styled.div`
   font-size: 16px;
   color: #555;
@@ -536,6 +420,25 @@ const InfoText = styled.div`
     margin-bottom: 11px;
     ul { padding-left: 18px; }
     li { margin-bottom: 4px; }
+  }
+`;
+
+const VideoSection = styled.div`
+  margin: 20px 0 0 0;
+  padding: 14px;
+  background: #f8fafc;
+  border-radius: 10px;
+`;
+
+const VideoLink = styled.a`
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 500;
+  margin-top: 10px;
+  display: inline-block;
+  &:hover {
+    color: #2980b9;
+    text-decoration: underline;
   }
 `;
 

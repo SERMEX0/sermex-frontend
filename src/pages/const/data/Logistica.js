@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
-import Header from "../../../components/Header2";
+import Header from "../../../components/Header";
 
 
 // 1. Diccionario de descripciones para cada estado

@@ -234,7 +234,7 @@ const Inicio = () => {
         >
           <h2>Centro de Ayuda SERMEX</h2>
           <h6>
-            SERMEX ofrece soporte técnico para resolver problemas con tus equipos y optimizar su rendimiento.
+            SERMEX ofrece soporte técnico para resolver problemas con tus equipos y optimizar rendimiento de sus productos.
           </h6>
 
           {/* Botones */}
@@ -255,17 +255,27 @@ const Inicio = () => {
               onMouseOver={e => e.target.style.backgroundColor = "#ddd"}
               onMouseOut={e => e.target.style.backgroundColor = "#fff"}
             >
-              Crear solicitud RMA
+              Crear solicitud de mantenimiento y garantía
             </button>
           </div>
           <div>
             <button
-              onClick={() => navigate("/logistica")}
+              onClick={() => navigate("/logistica1")}
               style={buttonStyle}
               onMouseOver={e => e.target.style.backgroundColor = "#ddd"}
               onMouseOut={e => e.target.style.backgroundColor = "#fff"}
             >
               Ver seguimiento de reporte
+            </button>
+          </div>
+          <div>
+            <button
+              onClick={() => navigate("/asesoria")}
+              style={buttonStyle}
+              onMouseOver={e => e.target.style.backgroundColor = "#ddd"}
+              onMouseOut={e => e.target.style.backgroundColor = "#fff"}
+            >
+              Contacta con nosotros
             </button>
           </div>
         </div>

@@ -11,11 +11,13 @@ import {
   FaChevronRight,
   FaExpand,
   FaCompress,
-  FaWhatsapp,
+ 
   FaListAlt,
   FaInfoCircle,
   FaCheckCircle,
+  FaFilePdf 
 } from "react-icons/fa";
+import ProductDocs from "./const/data/ProductDocs";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -180,9 +182,7 @@ const ProductHero = ({ producto, onBack, onQuote }) => (
         )}
       </HeroDetailsRow>
       <HeroActions>
-        <QuoteBtn onClick={onQuote}>
-          <FaWhatsapp /> Cotizar más productos
-        </QuoteBtn>
+        
       </HeroActions>
     </HeroInfo>
   </HeroZone>
@@ -227,22 +227,7 @@ const ProductDetail = () => {
   const [activeTab, setActiveTab] = useState("features");
 
   // WhatsApp handler
-  const handleContact = () => {
-    let mail =
-      sessionStorage.getItem("userEmail") ||
-      localStorage.getItem("userEmail") ||
-      "Correo no disponible";
-    if (mail === "Correo no disponible") {
-      mail = prompt("Por favor, ingresa tu correo para la cotización:");
-      if (!mail) return; // El usuario canceló
-    }
-    const phone = "524434368655";
-    const msg = `¡Hola! Estoy interesado cotizar mas piezas de:\n\n*Nombre del producto:* ${producto?.Nombre}\n*Correo del cliente:* ${mail}\n¿Podrían brindarme más información?`;
-    window.open(
-      `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`,
-      "_blank"
-    );
-  };
+  
 
   if (!producto) return <LoadingPlaceholder />;
 
@@ -253,31 +238,40 @@ const ProductDetail = () => {
         <ProductHero
           producto={producto}
           onBack={() => navigate("/seleccionar-producto")}
-          onQuote={handleContact}
+         
         />
-        <StickyTabs>
-          <TabBtn
-            active={activeTab === "features"}
-            onClick={() => setActiveTab("features")}
-          >
-            <FaListAlt /> Características
-          </TabBtn>
-          <TabBtn
-            active={activeTab === "details"}
-            onClick={() => setActiveTab("details")}
-          >
-            <FaInfoCircle /> Descripción
-          </TabBtn>
-        </StickyTabs>
+     <StickyTabs>
+  <TabBtn
+    active={activeTab === "features"}
+    onClick={() => setActiveTab("features")}
+  >
+    <FaListAlt /> Características
+  </TabBtn>
+  <TabBtn
+    active={activeTab === "details"}
+    onClick={() => setActiveTab("details")}
+  >
+    <FaInfoCircle /> Descripción
+  </TabBtn>
+  <TabBtn
+    active={activeTab === "docs"}
+    onClick={() => setActiveTab("docs")}
+  >
+    <FaFilePdf /> Documentación
+  </TabBtn>
+</StickyTabs>
         <TabSection>
-          {activeTab === "features" ? (
-            <ProductFeatures
-              features={producto["Caracteristicas de mi producto"]}
-            />
-          ) : (
-            <ProductDescription description={producto.Adicional} />
-          )}
-        </TabSection>
+  {activeTab === "features" ? (
+    <ProductFeatures features={producto["Caracteristicas de mi producto"]} />
+  ) : activeTab === "details" ? (
+    <ProductDescription description={producto.Adicional} />
+  ) : (
+    <ProductDocs
+      pdfUrl={producto.documentacion_pdf}
+      descripcion={producto.descripcion}
+    />
+  )}
+</TabSection>
       </Content>
       <Footer />
     </MainContainer>
@@ -455,30 +449,6 @@ const HeroActions = styled.div`
   }
 `;
 
-const QuoteBtn = styled.button`
-  background: linear-gradient(90deg, #128c7e 80%, #128c7e 100%);
-  color: #fff;
-  font-size: 1.12rem;
-  padding: 13px 27px;
-  border: none;
-  border-radius: 26px;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  cursor: pointer;
-  font-weight: 700;
-  box-shadow: 0 2px 12px #25d3663a;
-  transition: background 0.18s, transform 0.13s;
-  &:hover {
-    background: linear-gradient(90deg, #128c7e 90%, #075e54 100%);
-    transform: scale(1.05);
-  }
-  @media (max-width: 600px) {
-    font-size: 1rem;
-    padding: 8px 16px;
-    border-radius: 18px;
-  }
-`;
 
 const StickyTabs = styled.div`
   display: flex;
