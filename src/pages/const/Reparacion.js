@@ -6,7 +6,8 @@ import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
-
+import "./Herader.css";
+import "./FormStyles.css";
 
 import{FaTruck,
   FaTrash,
@@ -21,9 +22,8 @@ function App() {
   const [documentGenerated, setDocumentGenerated] = useState(false);
   const [documentBlob, setDocumentBlob] = useState(null);
   const [images, setImages] = useState([]); // Para almacenar las imágenes subidas
-  const [correoCliente, setCorreoCliente] = useState("");            // <--- AQUI  
-  const [errorCorreoCliente, setErrorCorreoCliente] = useState("");  // <--- AQUI
-const API_URL = process.env.REACT_APP_API_URL;
+  const API_URL = process.env.REACT_APP_API_URL;
+
 
   
   // Lista de vendedores
@@ -33,7 +33,7 @@ const API_URL = process.env.REACT_APP_API_URL;
     { id: 3, nombre: "Osvaldo", email: "julioosvaldoguzmancorrea53@gmail.com" }
   ];
 
-  const [selectedVendedor, setSelectedVendedor] = useState(null);
+  const [selectedVendedor, setSelectedVendedor] = useState(vendedores[0].id);
 
   const [formData, setFormData] = useState({
     CLIENTE: "",
@@ -145,95 +145,64 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 
   const handleSendEmail = async () => {
-  if (!documentBlob) return;
-
-  // Validar correo
-  if (!correoCliente || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(correoCliente)) {
-    setErrorCorreoCliente("Ingrese un correo válido.");
-    return;
-  }
-  // Validar vendedor (por si acaso)
-  if (!selectedVendedor) {
-    alert("Por favor selecciona un vendedor.");
-    return;
-  }
-// ...
-};
-
-// ... más abajo, donde va la sección de los botones en el preview
-{documentGenerated && (
-  <div style={styles.emailSection}>
-    {/* Correo de cliente primero */}
-    <div style={styles.formGroup}>
-      <label style={styles.label}>Tu correo electrónico de contacto *</label>
-      <input
-        type="email"
-        style={{
-          ...styles.input,
-          ...(errorCorreoCliente && styles.inputError)
-        }}
-        value={correoCliente}
-        placeholder="tucorreo@ejemplo.com"
-        onChange={e => {
-          setCorreoCliente(e.target.value);
-          if (errorCorreoCliente) setErrorCorreoCliente("");
-        }}
-        required
-      />
-      {errorCorreoCliente && (
-        <span style={styles.errorText}>{errorCorreoCliente}</span>
-      )}
-    </div>
-
-    {/* Selector de vendedor */}
-    <div style={styles.formGroup}>
-      <label style={styles.label}>Seleccionar vendedor para enviar *</label>
-      <select
-        value={selectedVendedor ?? ""}
-        onChange={handleVendedorChange}
-        style={styles.select}
-        required
-      >
-        <option value="" disabled>
-          -- Selecciona un vendedor --
-        </option>
-        {vendedores.map(vendedor => (
-          <option key={vendedor.id} value={vendedor.id}>
-            {vendedor.nombre} ({vendedor.email})
-          </option>
-        ))}
-      </select>
-    </div>
-
-    {/* Botones */}
-    <div style={styles.buttonGroup}>
-      <button
-        type="button"
-        onClick={handleEdit}
-        style={{...styles.button, ...styles.secondaryButton}}
-      >
-        Editar Datos
-      </button>
-      <button
-        type="button"
-        onClick={handleSendEmail}
-        style={{...styles.button, ...styles.successButton}}
-        disabled={
-          isSubmitting ||
-          !correoCliente ||
-          !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(correoCliente) ||
-          !selectedVendedor
+    if (!documentBlob) return;
+  
+    setIsSubmitting(true);
+    
+    try {
+      // Convertir documento a base64
+      const documentoBase64 = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.readAsDataURL(documentBlob);
+      });
+  
+      // Convertir imágenes a base64 (si existen)
+      const imagenesBase64 = [];
+      if (images && images.length > 0) {
+        for (const img of images) {
+          const base64 = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve({
+              name: img.name,
+              data: reader.result.split(',')[1],
+              type: img.type || 'jpeg'
+            });
+            reader.readAsDataURL(img.file);
+          });
+          imagenesBase64.push(base64);
         }
-      >
-        {isSubmitting ? (
-          <span style={styles.buttonLoading}>
-            <span style={styles.spinner}></span> Enviando...
-          </span>
-        ) : "Enviar por Correo"}
-      </button>
-    </div>
-  </div>
-)}
+      }
+  
+      // Enviar al servidor
+      const response = await fetch(`${API_URL}/api/enviar-garantia`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  },
+  body: JSON.stringify({
+    vendedorEmail: vendedores.find(v => v.id === selectedVendedor).email,
+    datosFormulario: formData,
+    documentoBase64: documentoBase64,
+    imagenes: imagenesBase64 // ← Envía las imágenes si existen
+  })
+});
+  
+      if (!response.ok) throw new Error(await response.text());
+      
+      alert('Tu solicitud y archivos han sido enviados. Por favor, espera la aprobación de la garantía y el envío de tu folio RMA.');
+
+      navigate('/inicio');
+  
+    } catch (error) {
+      console.error("Error completo:", error);
+      alert(`❌ Error al enviar: ${error.message}`);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div style={styles.container}>
       <Header />
@@ -247,9 +216,7 @@ const API_URL = process.env.REACT_APP_API_URL;
           
           <div style={styles.titleContainer}>
             <h2 style={styles.title}>Formulario de Garantía</h2>
-            <p style={styles.subtitle}>Completa el formulario para crear tu RMA y enviarlo por correo.</p>
-
-           
+            <p style={styles.subtitle}>Complete todos los campos obligatorios</p>
           </div>
           
 
@@ -399,29 +366,6 @@ const API_URL = process.env.REACT_APP_API_URL;
             ))}
           </select>
         </div>
-
-<div className={styles.formGroup}>
-  <label style={styles.label}>Tu correo electrónico de contacto *</label>
-  <input
-    type="email"
-    style={{
-      ...styles.input,
-      ...(errorCorreoCliente && styles.inputError)
-    }}
-    value={correoCliente}
-    placeholder="tucorreo@ejemplo.com"
-    onChange={e => {
-      setCorreoCliente(e.target.value);
-      if (errorCorreoCliente) setErrorCorreoCliente("");
-    }}
-    required
-  />
-  {errorCorreoCliente && (
-    <span style={styles.errorText}>{errorCorreoCliente}</span>
-  )}
-</div>
-
-
         
         <div style={styles.buttonGroup}>
           <button
@@ -521,7 +465,7 @@ const API_URL = process.env.REACT_APP_API_URL;
                 </div>
 
                 <div style={styles.formGroup}>
-                  <label style={styles.label}>Accesorios (Opcional)</label>
+                  <label style={styles.label}>Accesorios</label>
                   <input
                     type="text"
                     name="Accesorios"
