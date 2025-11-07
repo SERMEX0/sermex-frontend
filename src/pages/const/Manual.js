@@ -213,7 +213,7 @@ const Manual = () => {
 
             <div style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
               <button
-                onClick={() => navigate("/reparacion")}
+                onClick={() => navigate("/Rma")}
                 style={{
                   display: "flex",
                   alignItems: "center",
