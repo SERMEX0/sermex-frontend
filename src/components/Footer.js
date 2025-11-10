@@ -1,22 +1,14 @@
-import styled, { createGlobalStyle } from 'styled-components';
-
-const ResponsiveFooterWidth = createGlobalStyle`
-  @media (max-width: 600px) {
-    .footer-sermex {
-      width: 108% !important;
-    }
-  }
-  @media (min-width: 601px) {
-    .footer-sermex {
-      width: 108% !important;
-    }
-  }
-`;
+import styled from 'styled-components';
 
 const FooterContainer = styled.footer.attrs(() => ({
   className: 'footer-sermex'
 }))`
-  width: 97%;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  position: relative;
   background-color: #345475;
   color: #ffffff;
   text-align: center;
@@ -38,7 +30,6 @@ const Logo = styled.img`
   height: 48px;
   object-fit: contain;
   transition: transform 0.2s;
-
   &:hover {
     transform: scale(1.05);
   }
@@ -59,22 +50,19 @@ const partnerLogos = [
 
 const Footer = () => {
   return (
-    <>
-      <ResponsiveFooterWidth />
-      <FooterContainer>
-        <p>© 2025 En Proceso de Certificación ISO 9001:2015.</p>
-        <LogoGrid>
-          {partnerLogos.map((logo, index) => (
-            <Logo 
-              key={index}
-              src={logo.src}
-              alt={logo.alt}
-              loading="lazy"
-            />
-          ))}
-        </LogoGrid>
-      </FooterContainer>
-    </>
+    <FooterContainer>
+      <p>© 2025 En Proceso de Certificación ISO 9001:2015.</p>
+      <LogoGrid>
+        {partnerLogos.map((logo, index) => (
+          <Logo 
+            key={index}
+            src={logo.src}
+            alt={logo.alt}
+            loading="lazy"
+          />
+        ))}
+      </LogoGrid>
+    </FooterContainer>
   );
 };
 

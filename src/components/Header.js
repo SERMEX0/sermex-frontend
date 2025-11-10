@@ -180,22 +180,22 @@ const Header = ({ productos = [] }) => {
 };
 
 const styles = {
-  header: {
-    width: "97%", // valor por defecto
-    maxWidth: "1500px",
-    margin: "0 auto",
-    background: "linear-gradient(90deg, #345475 78%, #4474B0 100%)",
-    color: "#ffffff",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: "9px 24px",
-    zIndex: 1000,
-    position: "sticky",
-    top: 0,
-    minHeight: 70,
-    boxShadow: "0 2px 12px 0 rgba(52,84,117,0.09)",
-  },
+ header: {
+  width: "100%",
+  // maxWidth: "100px",  <-- BORRAR o poner maxWidth: "100vw"
+  margin: "0 auto",
+  background: "linear-gradient(90deg, #345475 78%, #4474B0 100%)",
+  color: "#ffffff",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  padding: "9px 24px",
+  zIndex: 1000,
+  position: "sticky",
+  top: 0,
+  minHeight: 70,
+  boxShadow: "0 2px 12px 0 rgba(52,84,117,0.09)",
+},
   logo: {
     height: "64px",
     marginRight: "22px",

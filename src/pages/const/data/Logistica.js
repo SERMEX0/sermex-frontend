@@ -76,8 +76,10 @@ const Logistica = () => {
   }
 
   return (
+    <>
+    <Header />
     <div style={styles.container}>
-      <Header />
+   
       <h2 style={styles.title}>Seguimiento de Tus Equipos</h2>
       <p style={styles.subtitle}>Mostrando resultados para: {userEmail}</p>
       
@@ -128,7 +130,7 @@ const Logistica = () => {
       )}
       
     </div>
-    
+    </>
   );
   
 };

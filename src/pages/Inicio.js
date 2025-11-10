@@ -27,17 +27,20 @@ const Header = () => {
     <>
       <style>{`
         .sermex-header {
-          width: 102%;
-          max-width: 1500px;
-          margin: 0 auto;
+          width: 100vw;
+          position: relative;
+          left: 50%;
+          right: 50%;
+          margin-left: -50vw;
+          margin-right: -50vw;
           background-color: #345475;
           color: #ffffff;
           display: flex;
           align-items: center;
           justify-content: space-between;
           padding: 10px 20px;
-          z-index: 2;
-          position: relative;
+          z-index: 1000;
+          box-sizing: border-box;
         }
         .sermex-header-logo {
           height: 70px;
@@ -45,6 +48,7 @@ const Header = () => {
           width: auto;
           object-fit: contain;
           display: block;
+          cursor: pointer;
         }
         .sermex-profile-container {
           position: relative;
@@ -61,9 +65,7 @@ const Header = () => {
           object-fit: cover;
           border: 2px solid #fff;
           background: #eaeaea;
-          transition: box-shadow 0.2s, border-color 0.2s, left 0.2s;
-          position: relative;
-          left: 0;
+          transition: box-shadow 0.2s, border-color 0.2s;
         }
         .sermex-profile-avatar:hover {
           border-color: #4474B0;
@@ -71,7 +73,7 @@ const Header = () => {
         }
         .sermex-profile-menu {
           position: absolute;
-          top: 54px;
+          top: 60px;
           right: 0;
           background: #fff;
           border-radius: 8px;
@@ -80,7 +82,7 @@ const Header = () => {
           display: flex;
           flex-direction: column;
           min-width: 170px;
-          z-index: 100;
+          z-index: 1001;
           animation: fadeInMenu 0.17s;
         }
         .sermex-profile-menu input[type="file"] {
@@ -96,6 +98,7 @@ const Header = () => {
           text-align: left;
           cursor: pointer;
           transition: background 0.13s;
+          font-family: inherit;
         }
         .sermex-profile-link:hover {
           background: #f3f7ff;
@@ -113,21 +116,20 @@ const Header = () => {
         /* SOLO en móvil: mueve la imagen de perfil a la izquierda */
         @media (max-width: 700px) {
           .sermex-header {
-            padding: 6px 3vw;
+            padding: 6px 15px;
           }
           .sermex-header-logo {
-            height: 68px;
-            max-width: 145px;
+            height: 60px;
+            max-width: 140px;
           }
           .sermex-profile-avatar {
-            width: 52px;
-            height: 52px;
-            left: -13px; /* mueve un poco a la izquierda SOLO en móvil */
+            width: 48px;
+            height: 48px;
           }
           .sermex-profile-menu {
-            top: 38px;
-            min-width: 97px;
-            font-size: 0.97rem;
+            top: 50px;
+            min-width: 150px;
+            font-size: 0.9rem;
             right: 0;
           }
         }
@@ -138,6 +140,7 @@ const Header = () => {
           src="/logo_SERMEX_blanco.fw.png"
           alt="Logo"
           className="sermex-header-logo"
+          onClick={() => window.location.href = "/inicio"}
         />
 
         {/* Contenedor del perfil */}
@@ -153,29 +156,29 @@ const Header = () => {
               className="sermex-profile-avatar"
             />
           ) : (
-            <FaUserCircle size={40} color="#ffffff" />
+            <FaUserCircle size={54} color="#ffffff" />
           )}
 
           {/* Menú desplegable */}
           {menuVisible && (
-  <div className="sermex-profile-menu">
-    <NavLink to="/perfil" className="sermex-profile-link">
-      Mi Perfil
-    </NavLink>
-    <button
-      className="sermex-profile-link logout"
-      onClick={() => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        localStorage.removeItem("fotoPerfil");
-        window.location.href = "/login";
-        setMenuVisible(false);
-      }}
-    >
-      Cerrar Sesión
-    </button>
-  </div>
-)}
+            <div className="sermex-profile-menu">
+              <NavLink to="/perfil" className="sermex-profile-link">
+                Mi Perfil
+              </NavLink>
+              <button
+                className="sermex-profile-link logout"
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  localStorage.removeItem("user");
+                  localStorage.removeItem("fotoPerfil");
+                  window.location.href = "/login";
+                  setMenuVisible(false);
+                }}
+              >
+                Cerrar Sesión
+              </button>
+            </div>
+          )}
         </div>
       </header>
     </>
@@ -186,8 +189,8 @@ const Header = () => {
 const Inicio = () => {
   const navigate = useNavigate();
 
-  return (
-    <div>
+   return (
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Header />
 
       {/* Contenido principal con video de fondo */}
@@ -198,7 +201,9 @@ const Inicio = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          width: "107%",
+          width: "100vw",
+          minHeight: "calc(100vh - 140px)",
+          overflow: "hidden"
         }}
       >
         {/* Video de fondo */}
@@ -211,7 +216,7 @@ const Inicio = () => {
             position: "absolute",
             top: 0,
             left: 0,
-            width: "101%",
+            width: "100vw",
             height: "100%",
             objectFit: "cover",
             zIndex: -1,
@@ -220,24 +225,24 @@ const Inicio = () => {
           <source src="https://sermex0.github.io/Sermex_Api_Images/SERMEX-video..mp4" type="video/mp4" />
         </video>
 
-        {/* Contenido centrado sobre el video */}
+        {/* Contenido centrado sobre el video - EXACTAMENTE COMO ESTABA */}
         <div
           style={{
             textAlign: "center",
             backgroundColor: "rgba(0, 0, 0, 0.6)",
             color: "#fff",
-            padding: "100px",
+            padding: "100px", // ← Como estaba
             borderRadius: "10px",
             zIndex: 1,
-            maxWidth: "98vw"
+            maxWidth: "98vw" // ← Como estaba
           }}
         >
           <h2>Centro de Ayuda SERMEX</h2>
-          <h6>
-            SERMEX ofrece soporte técnico para resolver problemas con tus equipos y optimizar rendimiento de sus productos.
-          </h6>
+          <h5>
+            El acceso centralizado a todo el soporte técnico SERMEX. Solicita mantenimiento, gestiona garantías y realiza el seguimiento de tus reportes.
+          </h5>
 
-          {/* Botones */}
+          {/* Botones - EXACTAMENTE COMO ESTABAN */}
           <div>
             <button
               onClick={() => navigate("/seleccionar-producto")}
@@ -275,25 +280,19 @@ const Inicio = () => {
               onMouseOver={e => e.target.style.backgroundColor = "#ddd"}
               onMouseOut={e => e.target.style.backgroundColor = "#fff"}
             >
-              Contacta con nosotros
+              Contáctate con nosotros
             </button>
           </div>
         </div>
       </div>
-      {/* El Footer se ajusta abajo solo en escritorio */}
+      
+      {/* Footer */}
       <Footer />
-      <style>{`
-        @media (min-width: 1024px) {
-          .sermex-footer {
-            margin-top: 90px !important; /* Solo en escritorio, baja el footer */
-          }
-        }
-      `}</style>
     </div>
   );
 };
 
-// Estilos de botones reutilizables
+// Estilos de botones reutilizables - EXACTAMENTE COMO ESTABAN
 const buttonStyle = {
   padding: "10px 20px",
   fontSize: "1rem",
@@ -302,8 +301,7 @@ const buttonStyle = {
   color: "#345475",
   border: "none",
   borderRadius: "5px",
-  marginTop: "15px",
+  marginTop: "15px", // ← Como estaba
   transition: "background-color 0.3s ease",
 };
-
 export default Inicio;

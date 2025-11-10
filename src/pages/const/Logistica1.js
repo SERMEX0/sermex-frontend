@@ -3,7 +3,6 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import Header from "../../components/Header2";
 
-
 // 1. Diccionario de descripciones para cada estado
 const descripcionesEstado = {
   recibido: 'El producto llegó a SERMEX, pronto empezará la revisión.',
@@ -35,8 +34,8 @@ const Logistica = () => {
       setUserEmail(email);
 
       axios.get(`${API_URL}/api/logistica/${email}`, {
-  headers: { 'Authorization': `Bearer ${token}` }
-})
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
       .then(res => {
         setPedidos(res.data || []);
         setLoading(false);
@@ -72,65 +71,69 @@ const Logistica = () => {
   };
 
   if (loading) {
-    return <div style={styles.loading}>Cargando tus pedidos...</div>;
+    return (
+      <>
+        <Header />
+        <div style={styles.loading}>Cargando tus pedidos...</div>
+      </>
+    );
   }
 
   return (
-    <div style={styles.container}>
+    <>
       <Header />
-      <h2 style={styles.title}>Seguimiento de Tus Equipos</h2>
-      <p style={styles.subtitle}>Mostrando resultados para: {userEmail}</p>
-      
-      {pedidosFiltrados.length === 0 ? (
-        <div style={styles.emptyState}>
-          No hay pedidos registrados para este correo.
-        </div>
-      ) : (
-        <div style={styles.grid}>
-          {pedidosFiltrados.map(pedido => (
-            <div key={pedido.id} style={styles.card}>
-              <h3 style={styles.productName}>{pedido.producto}</h3>
-              <p style={styles.rmaText}>Folio RMA: <strong>{pedido.rma_id}</strong></p>
-              
-              <div style={styles.statusContainer}>
-                <div
-                  style={{
-                    ...styles.statusBadge,
-                    ...getStatusStyle(pedido.estado)
-                  }}
-                >
-                  {pedido.estado.replace('_', ' ').toUpperCase()}
+      <div style={styles.container}>
+        <h2 style={styles.title}>Seguimiento de Tus Equipos</h2>
+        <p style={styles.subtitle}>Mostrando resultados para: {userEmail}</p>
+        
+        {pedidosFiltrados.length === 0 ? (
+          <div style={styles.emptyState}>
+            No hay pedidos registrados para este correo.
+          </div>
+        ) : (
+          <div style={styles.grid}>
+            {pedidosFiltrados.map(pedido => (
+              <div key={pedido.id} style={styles.card}>
+                <h3 style={styles.productName}>{pedido.producto}</h3>
+                <p style={styles.rmaText}>Folio RMA: <strong>{pedido.rma_id}</strong></p>
+                
+                <div style={styles.statusContainer}>
+                  <div
+                    style={{
+                      ...styles.statusBadge,
+                      ...getStatusStyle(pedido.estado)
+                    }}
+                  >
+                    {pedido.estado.replace('_', ' ').toUpperCase()}
+                  </div>
+                  {/* Descripción del estado */}
+                  <div style={styles.estadoDescripcion}>
+                    {descripcionesEstado[pedido.estado]}
+                  </div>
+                  <div style={styles.timeline}>
+                    {estadosOrdenados.map(estado => (
+                      <div 
+                        key={estado}
+                        style={{
+                          ...styles.timelineStep,
+                          ...(pedido.estado === estado ? styles.activeStep : {}),
+                          ...(estadosOrdenados.indexOf(pedido.estado) > estadosOrdenados.indexOf(estado) ? styles.completedStep : {})
+                        }}
+                      />
+                    ))}
+                  </div>
                 </div>
-                {/* Descripción del estado */}
-                <div style={styles.estadoDescripcion}>
-                  {descripcionesEstado[pedido.estado]}
-                </div>
-                <div style={styles.timeline}>
-                  {estadosOrdenados.map(estado => (
-                    <div 
-                      key={estado}
-                      style={{
-                        ...styles.timelineStep,
-                        ...(pedido.estado === estado ? styles.activeStep : {}),
-                        ...(estadosOrdenados.indexOf(pedido.estado) > estadosOrdenados.indexOf(estado) ? styles.completedStep : {})
-                      }}
-                    />
-                  ))}
-                </div>
+                
+                <p style={styles.updateText}>
+                  Última actualización: {new Date(pedido.fecha_actualizacion).toLocaleString()}
+                </p>
               </div>
-              
-              <p style={styles.updateText}>
-                Última actualización: {new Date(pedido.fecha_actualizacion).toLocaleString()}
-              </p>
-            </div>
-          ))}
-        </div>
-      )}
-      
-    </div>
-    
+            ))}
+          </div>
+        )}
+      </div>
+    </>
   );
-  
 };
 
 const styles = {
@@ -138,7 +141,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     minHeight: '100vh',
-    padding: '1px',
+    padding: '20px',
     width: '100%',
     maxWidth: '1500px',
     margin: '0 auto',
@@ -159,7 +162,8 @@ const styles = {
     textAlign: 'center',
     padding: '40px',
     fontSize: '18px',
-    color: '#555'
+    color: '#555',
+    width: '100%'
   },
   emptyState: {
     textAlign: 'center',
@@ -182,9 +186,6 @@ const styles = {
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
     backgroundColor: '#fff',
     transition: 'transform 0.2s',
-    '&:hover': {
-      transform: 'translateY(-2px)'
-    }
   },
   productName: {
     marginTop: '0',
@@ -243,6 +244,5 @@ const styles = {
     fontStyle: 'italic'
   }
 };
-
 
 export default Logistica;

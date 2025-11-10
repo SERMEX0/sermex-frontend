@@ -209,8 +209,10 @@ const API_URL = process.env.REACT_APP_API_URL;
 };
 
   return (
+    <>
+    <Header />
     <div style={styles.container}>
-      <Header />
+      
       <div style={styles.content}>
         <div style={styles.headerSection}>
           <img 
@@ -535,6 +537,7 @@ const API_URL = process.env.REACT_APP_API_URL;
       </div>
       <Footer />
     </div>
+    </>
   );
 }
 
