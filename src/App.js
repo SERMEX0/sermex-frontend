@@ -23,6 +23,7 @@ import AuthWrapper from "./components/AuthWrapper";
 import SessionChecker from "./components/SessionChecker";
 import DataResult from "./pages/DataResult";
 import Asesoria from "./pages/const/Asesoria";
+import ResetPassword from "./pages/ResetPassword";
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
         <Route path="/authWrapper" element={<AuthWrapper />}/>
         <Route path="/sessionChecker" element={<SessionChecker />}/>
         <Route path="/change-Password" element={<ChangePassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/detalle-producto" element={<ProductDetail />} />  {/* ✅ Nueva ruta */}
         <Route path="/perfil" element={<Perfil />} />
         <Route path="/reparacion" element={<Reparacion />} />
