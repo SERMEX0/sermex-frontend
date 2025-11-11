@@ -1,10 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { 
- 
-  FaWhatsapp
-  
-} from "react-icons/fa";
 
 const Login = () => {
   const [correo, setCorreo] = useState("");
@@ -13,35 +8,63 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL;
+  
+  // --- Nuevo flujo: recuperación automatica ---
+  const [showResetForm, setShowResetForm] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetLoading, setResetLoading] = useState(false);
+  const [resetSuccess, setResetSuccess] = useState("");
+  const [resetError, setResetError] = useState("");
 
   const iniciarSesion = async (e) => {
-  e.preventDefault();
-  setError("");
-  setLoading(true);
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
-  try {
-    const response = await fetch(`${API_URL}/login`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ correo, password }),
-});
+    try {
+      const response = await fetch(`${API_URL}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ correo, password }),
+      });
 
-    if (!response.ok) throw new Error("Correo o contraseña incorrectos");
+      if (!response.ok) throw new Error("Correo o contraseña incorrectos");
 
-    const data = await response.json();
-    
-    // ESTA ES LA PARTE QUE DEBES AÑADIR/MODIFICAR:
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
-    
-    
-    navigate("/inicio");
-  } catch (err) {
-    setError(err.message || "Error al conectar con el servidor");
-  } finally {
-    setLoading(false);
-  }
-};
+      const data = await response.json();
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      navigate("/inicio");
+    } catch (err) {
+      setError(err.message || "Error al conectar con el servidor");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // --- Nueva función para recuperación ---
+  const handlePasswordReset = async (e) => {
+    e.preventDefault();
+    setResetLoading(true);
+    setResetSuccess("");
+    setResetError("");
+    try {
+      const response = await fetch(`${API_URL}/api/forgot-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: resetEmail }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Error al enviar correo");
+      setResetSuccess("¡Correo enviado! Revisa tu bandeja para restablecer la contraseña.");
+      setResetEmail("");
+    } catch (err) {
+      setResetError(err.message);
+    } finally {
+      setResetLoading(false);
+    }
+  };
 
   return (
     <div style={styles.container}>
@@ -101,38 +124,85 @@ const Login = () => {
           </button>
         </form>
 
-                
-       
-   <div style={styles.footer}>
-  <p style={styles.footerText}>
-    ¿Problemas para ingresar?{' '}
-    <a 
-      href="#" 
-      onClick={(e) => {
-        e.preventDefault();
-        const phoneNumber = "524434368655";
-        const message = `¡Hola! Necesito ayuda para restablecer mi contraseña.\n\n No puedo acceder.`;
-        window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
-      }}
-      style={styles.link}
-    >
-      Solicita restablecer tu contraseña
-    </a>
-  </p>
-</div>
- 
-        
+        {/* ---- Nuevo Modal a lo ChangePassword ---- */}
+        <div style={styles.footer}>
+          <p style={styles.footerText}>
+            ¿Problemas para ingresar?{' '}
+            <a 
+              href="#" 
+              onClick={(e) => {
+                e.preventDefault();
+                setShowResetForm(true);
+                setResetSuccess("");
+                setResetError("");
+              }}
+              style={styles.link}
+            >
+              Solicita restablecer tu contraseña
+            </a>
+          </p>
+        </div>
+
+        {showResetForm && (
+          <div
+            style={{
+              background: "#f8fafe",
+              borderRadius: 8,
+              boxShadow: "0 4px 22px rgba(52,84,117,0.09)",
+              margin: "16px auto",
+              padding: "20px",
+              maxWidth: "360px"
+            }}>
+            <form onSubmit={handlePasswordReset}>
+              <div style={{ marginBottom: 8 }}>
+                <label style={{ fontWeight: 500, color: "#345475" }}>
+                  Escribe tu correo para restablecer la contraseña:
+                </label>
+                <input
+                  type="email"
+                  value={resetEmail}
+                  onChange={e => setResetEmail(e.target.value)}
+                  required
+                  placeholder="Tu correo electrónico"
+                  style={{
+                    width: "100%", border: "1px solid #cdddec", padding: 8, borderRadius: 7, marginTop: 6
+                  }}
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={resetLoading}
+                style={{
+                  background: resetLoading ? "#bbb" : "linear-gradient(90deg,#345475 80%,#4474B0 100%)",
+                  color: "#fff", border: "none", borderRadius: 8, padding: "11px 24px",
+                  fontWeight: 600, marginBottom: 8, cursor: resetLoading ? "not-allowed" : "pointer"
+                }}
+              >
+                {resetLoading ? "Enviando..." : "Enviar correo de recuperación"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowResetForm(false)}
+                style={{
+                  background: "transparent", color: "#345475", border: "none",
+                  textDecoration: "underline", cursor: "pointer"
+                }}
+              >
+                Cancelar
+              </button>
+              {resetError && <div style={styles.errorMessage}>{resetError}</div>}
+              {resetSuccess && <div style={styles.successMessage}>{resetSuccess}</div>}
+            </form>
+          </div>
+        )}
+
       </div>
-      
     </div>
-    
   );
-  
-  
 };
 
 
-// Estilos mejorados
+// Estilos
 const styles = {
   container: {
     display: "flex",
@@ -212,11 +282,6 @@ const styles = {
     cursor: "pointer",
     transition: "all 0.3s ease",
     marginTop: "10px",
-    ":hover": {
-      backgroundColor: "#2980b9",
-      transform: "translateY(-2px)",
-      boxShadow: "0 4px 8px rgba(41, 128, 185, 0.2)",
-    },
   },
   buttonDisabled: {
     width: "100%",
@@ -253,6 +318,15 @@ const styles = {
     marginBottom: "20px",
     border: "1px solid #ffdddd",
   },
+  successMessage: {
+    backgroundColor: "#eafaf1",
+    color: "#2e7d32",
+    padding: "12px",
+    borderRadius: "8px",
+    fontSize: "14px",
+    marginBottom: "20px",
+    border: "1px solid #b0eacb",
+  },
   footer: {
     marginTop: "30px",
     borderTop: "1px solid #ecf0f1",
@@ -266,9 +340,6 @@ const styles = {
     color: "#3498db",
     textDecoration: "none",
     fontWeight: "500",
-    ":hover": {
-      textDecoration: "underline",
-    },
   },
 };
 
