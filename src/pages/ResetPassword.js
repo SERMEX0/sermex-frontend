@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Header from "../components/Header2";
+import Header from "../components/Header3";
 import Footer from "../components/Footer";
 
 const API_URL = process.env.REACT_APP_API_URL;
