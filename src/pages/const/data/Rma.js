@@ -436,7 +436,7 @@ const API_URL = process.env.REACT_APP_API_URL;
                     value={formData.CLIENTE}
                     onChange={handleChange}
                     style={{...styles.input, ...(errors.CLIENTE && styles.inputError)}}
-                    placeholder="Nombre del Cliente"
+                    placeholder="Nombre: ya sea del cliente o de la empresa"
                   />
                   {errors.CLIENTE && <span style={styles.errorText}>{errors.CLIENTE}</span>}
                 </div>

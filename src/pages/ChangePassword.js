@@ -5,9 +5,6 @@ import styled from "styled-components";
 import Header from "../components/Header2";
 import Footer from "../components/Footer";
 
-// Puedes copiar este Footer o usar el tuyo propio
-
-
 const ChangePassword = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -18,6 +15,14 @@ const ChangePassword = () => {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  
+  // Para recuperar contraseña:
+  const [showResetForm, setShowResetForm] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetLoading, setResetLoading] = useState(false);
+  const [resetSuccess, setResetSuccess] = useState("");
+  const [resetError, setResetError] = useState("");
+
   const API_URL = process.env.REACT_APP_API_URL;
 
   const navigate = useNavigate();
@@ -49,18 +54,18 @@ const ChangePassword = () => {
     setLoading(true);
 
     try {
-  const token = localStorage.getItem("token");
-  const response = await fetch(`${API_URL}/change-password`, {
-    method: "POST",
-    headers: { 
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
-    },
-    body: JSON.stringify({ 
-      currentPassword, 
-      newPassword 
-    }),
-  });
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${API_URL}/change-password`, {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ 
+          currentPassword, 
+          newPassword 
+        }),
+      });
 
       const data = await response.json();
 
@@ -77,6 +82,29 @@ const ChangePassword = () => {
       setError(err.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // NUEVO flujo: recuperar contraseña por correo
+  const handlePasswordReset = async (e) => {
+    e.preventDefault();
+    setResetLoading(true);
+    setResetSuccess("");
+    setResetError("");
+    try {
+      const response = await fetch(`${API_URL}/api/forgot-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: resetEmail }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Error al enviar correo");
+      setResetSuccess("¡Correo enviado! Revisa tu bandeja para restablecer la contraseña.");
+      setResetEmail("");
+    } catch (err) {
+      setResetError(err.message);
+    } finally {
+      setResetLoading(false);
     }
   };
 
@@ -166,21 +194,76 @@ const ChangePassword = () => {
             {loading ? "Cambiando..." : "Cambiar Contraseña"}
           </Button>
       
+          {/* ------ FLUJO MODAL EMAIL RECUPERACIÓN -------- */}
           <FooterText>
-            ¿Quieres restablecer tu contraseña?{" "}
+            ¿Olvidaste tu contraseña?{" "}
             <FooterLink
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                const phoneNumber = "524434368655";
-                const message = `¡Hola! Necesito ayuda para restablecer mi contraseña.\n\nPor favor indíquenme cómo proceder para recuperar mi acceso.`;
-                window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
+                setShowResetForm(true);
+                setResetSuccess("");
+                setResetError("");
               }}
             >
-              Contacta al administrador
+              Restablécela aquí
             </FooterLink>
           </FooterText>
         </Form>
+
+        {showResetForm && (
+          <div
+            style={{
+              background: "#f8fafe",
+              borderRadius: 8,
+              boxShadow: "0 4px 22px rgba(52,84,117,0.09)",
+              margin: "16px auto",
+              padding: "20px",
+              maxWidth: "360px"
+            }}>
+            <form onSubmit={handlePasswordReset}>
+              <div style={{ marginBottom: 8 }}>
+                <label style={{ fontWeight: 500 }}>
+                  Escribe tu correo para restablecer la contraseña:
+                </label>
+                <input
+                  type="email"
+                  value={resetEmail}
+                  onChange={e => setResetEmail(e.target.value)}
+                  required
+                  placeholder="Tu correo electrónico"
+                  style={{
+                    width: "100%", border: "1px solid #cdddec", padding: 8, borderRadius: 7, marginTop: 6
+                  }}
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={resetLoading}
+                style={{
+                  background: resetLoading ? "#bbb" : "linear-gradient(90deg,#345475 80%,#4474B0 100%)",
+                  color: "#fff", border: "none", borderRadius: 8, padding: "11px 24px",
+                  fontWeight: 600, marginBottom: 8, cursor: resetLoading ? "not-allowed" : "pointer"
+                }}
+              >
+                {resetLoading ? "Enviando..." : "Enviar correo de recuperación"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowResetForm(false)}
+                style={{
+                  background: "transparent", color: "#345475", border: "none",
+                  textDecoration: "underline", cursor: "pointer"
+                }}
+              >
+                Cancelar
+              </button>
+              {resetError && <ErrorMessage>{resetError}</ErrorMessage>}
+              {resetSuccess && <SuccessMessage>{resetSuccess}</SuccessMessage>}
+            </form>
+          </div>
+        )}
+
       </Card>
       <Footer/>
     </Container>
