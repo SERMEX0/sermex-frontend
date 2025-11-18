@@ -47,17 +47,19 @@ const Tutorial = () => {
     return (
       <MainContainer>
         <Header />
-        <HeroSkeleton>
-          <div>
-            <Skeleton height={220} width={260} style={{ borderRadius: 18 }} />
-          </div>
-          <div style={{ flex: 1, marginLeft: 32 }}>
-            <Skeleton height={40} width={320} style={{ marginBottom: 18 }} />
-            <Skeleton height={25} count={3} width="80%" style={{ marginBottom: 10 }} />
-            <Skeleton height={20} count={2} width="60%" style={{ marginBottom: 10 }} />
-          </div>
-        </HeroSkeleton>
-        <Skeleton style={{marginTop: 32, borderRadius: 18}} height={350} />
+        <Main>
+          <HeroSkeleton>
+            <div>
+              <Skeleton height={220} width={260} style={{ borderRadius: 18 }} />
+            </div>
+            <div style={{ flex: 1, marginLeft: 32 }}>
+              <Skeleton height={40} width={320} style={{ marginBottom: 18 }} />
+              <Skeleton height={25} count={3} width="80%" style={{ marginBottom: 10 }} />
+              <Skeleton height={20} count={2} width="60%" style={{ marginBottom: 10 }} />
+            </div>
+          </HeroSkeleton>
+          <Skeleton style={{marginTop: 32, borderRadius: 18}} height={350} />
+        </Main>
         <Footer />
       </MainContainer>
     );
@@ -66,81 +68,83 @@ const Tutorial = () => {
   return (
     <MainContainer>
       <Header />
-      <HeroSection>
-        <HeroImageContainer>
-          {mainImage ? (
-            <HeroImage
-              src={mainImage}
-              alt="Producto"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = 'https://via.placeholder.com/400x300?text=Imagen+no+disponible';
-              }}
-            />
-          ) : (
-            <ImagePlaceholder>
-              <FaUserCog size={52} />
-              <span>Imagen no disponible</span>
-            </ImagePlaceholder>
-          )}
-        </HeroImageContainer>
-        <HeroDetails>
-          <h1>{producto.Nombre || "Producto sin nombre"}</h1>
-          <HeroInfo>
-            {producto.Modelo && (
-              <InfoBox>
-                <strong>Modelo</strong>
-                <span>{producto.Modelo}</span>
-              </InfoBox>
+      <Main>
+        <HeroSection>
+          <HeroImageContainer>
+            {mainImage ? (
+              <HeroImage
+                src={mainImage}
+                alt="Producto"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = 'https://via.placeholder.com/400x300?text=Imagen+no+disponible';
+                }}
+              />
+            ) : (
+              <ImagePlaceholder>
+                <FaUserCog size={52} />
+                <span>Imagen no disponible</span>
+              </ImagePlaceholder>
             )}
-            {producto["Número de serie"] && (
-              <InfoBox>
-                <strong>Serie</strong>
-                <span>{producto["Número de serie"]}</span>
-              </InfoBox>
-            )}
-            {producto["Fecha de compra"] && (
-              <InfoBox>
-                <strong>Compra</strong>
-                <span>{producto["Fecha de compra"]}</span>
-              </InfoBox>
-            )}
-          </HeroInfo>
-          <HeroDesc>
-            Tutoriales del producto.
-          </HeroDesc>
-        </HeroDetails>
-        
-      </HeroSection>
+          </HeroImageContainer>
+          <HeroDetails>
+            <h1>{producto.Nombre || "Producto sin nombre"}</h1>
+            <HeroInfo>
+              {producto.Modelo && (
+                <InfoBox>
+                  <strong>Modelo</strong>
+                  <span>{producto.Modelo}</span>
+                </InfoBox>
+              )}
+              {producto["Número de serie"] && (
+                <InfoBox>
+                  <strong>Serie</strong>
+                  <span>{producto["Número de serie"]}</span>
+                </InfoBox>
+              )}
+              {producto["Fecha de compra"] && (
+                <InfoBox>
+                  <strong>Compra</strong>
+                  <span>{producto["Fecha de compra"]}</span>
+                </InfoBox>
+              )}
+            </HeroInfo>
+            <HeroDesc>
+              Tutoriales del producto.
+            </HeroDesc>
+          </HeroDetails>
+          
+        </HeroSection>
 
-      <FadeSection>
-        <CardsFlex>
-          <InfoCardVibrant style={{ maxWidth: 540, margin: "0 auto" }}>
-            <SectionTitle>
-              <FaUserCog /> Tutorial del producto
-              <Badge tutorial>TUTORIAL</Badge>
-            </SectionTitle>
-            <InfoText>
-              {producto["Soporte y mantenimiento"] || "Para asistencia técnica con este producto, por favor contacte a nuestro equipo de soporte."}
-            </InfoText>
-            {producto.Video && (
-              <VideoSection>
-                <DetailItem>
-                  <FaVideo style={{ marginRight: 8, color: "#10b981" }} />
-                  <span><strong>Video tutorial</strong></span>
-                </DetailItem>
-                <VideoLink
-                  href={producto.Video}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Ver video tutorial del producto
-                </VideoLink>
-              </VideoSection>
-            )}
-          </InfoCardVibrant>
-        </CardsFlex>
-      </FadeSection>
+        <FadeSection>
+          <CardsFlex>
+            <InfoCardVibrant style={{ maxWidth: 540, margin: "0 auto" }}>
+              <SectionTitle>
+                <FaUserCog /> Tutorial del producto
+                <Badge tutorial>TUTORIAL</Badge>
+              </SectionTitle>
+              <InfoText>
+                {producto["Soporte y mantenimiento"] || "Para asistencia técnica con este producto, por favor contacte a nuestro equipo de soporte."}
+              </InfoText>
+              {producto.Video && (
+                <VideoSection>
+                  <DetailItem>
+                    <FaVideo style={{ marginRight: 8, color: "#10b981" }} />
+                    <span><strong>Video tutorial</strong></span>
+                  </DetailItem>
+                  <VideoLink
+                    href={producto.Video}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Ver video tutorial del producto
+                  </VideoLink>
+                </VideoSection>
+              )}
+            </InfoCardVibrant>
+          </CardsFlex>
+        </FadeSection>
+      </Main>
       <Footer />
     </MainContainer>
   );
@@ -160,6 +164,15 @@ const MainContainer = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+`;
+
+/* Nuevo: Main que ocupa el espacio entre Header y Footer para empujar footer abajo */
+const Main = styled.main`
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 0;
 `;
 
 const HeroSection = styled.section`

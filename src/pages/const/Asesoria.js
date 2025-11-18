@@ -28,54 +28,54 @@ const PantallaSimple = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setEnviando(true);
-  setError("");
+    e.preventDefault();
+    setEnviando(true);
+    setError("");
 
-  try {
-    console.log("Enviando datos:", form);
-    
-    const response = await fetch(`${API_URL}/api/enviar-contacto`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(form)
-});
-    console.log("Response status:", response.status);
-    
-    const text = await response.text();
-    console.log("Response text:", text);
-    
-    let data;
     try {
-      data = JSON.parse(text);
-    } catch (parseError) {
-      console.error("Error parsing JSON:", parseError, text);
-      throw new Error("Respuesta del servidor no válida");
-    }
+      console.log("Enviando datos:", form);
 
-    if (response.ok) {
-      setEnviado(true);
-      setForm({
-        nombre: "",
-        correo: "",
-        empresa: "",
-        telefono: "",
-        asunto: "",
-        tipo: "",
-        descripcion: "",
+      const response = await fetch(`${API_URL}/api/enviar-contacto`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form)
       });
-    } else {
-      setError(data.error || "Error al enviar la solicitud");
+      console.log("Response status:", response.status);
+
+      const text = await response.text();
+      console.log("Response text:", text);
+
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (parseError) {
+        console.error("Error parsing JSON:", parseError, text);
+        throw new Error("Respuesta del servidor no válida");
+      }
+
+      if (response.ok) {
+        setEnviado(true);
+        setForm({
+          nombre: "",
+          correo: "",
+          empresa: "",
+          telefono: "",
+          asunto: "",
+          tipo: "",
+          descripcion: "",
+        });
+      } else {
+        setError(data.error || "Error al enviar la solicitud");
+      }
+    } catch (err) {
+      console.error("Error completo:", err);
+      setError(err.message || "Error de conexión. Por favor, intente nuevamente.");
+    } finally {
+      setEnviando(false);
     }
-  } catch (err) {
-    console.error("Error completo:", err);
-    setError(err.message || "Error de conexión. Por favor, intente nuevamente.");
-  } finally {
-    setEnviando(false);
-  }
-};
+  };
 
   const styles = {
     container: {
@@ -209,171 +209,165 @@ const PantallaSimple = () => {
     },
   };
 
-  if (enviado) {
-    return (
-      <div>
-        <Header />
-        <div style={styles.container}>
-          <div style={styles.success}>
-            <div style={styles.successIcon}>✅</div>
-            <h3 style={styles.successTitle}>¡Solicitud enviada con éxito!</h3>
-            <p style={styles.successMessage}>
-              Hemos recibido tu solicitud de contacto. Nos pondremos en contacto 
-              contigo en un plazo máximo de 24 horas hábiles.
-            </p>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
   return (
     <div>
       <Header />
-      <div style={styles.container}>
-        <div style={styles.header}>
-          <img
-            src="/logo_SERMEX_azul.fw.png"
-            alt="Logo"
-            style={styles.logo}
-          />
-          <h2 style={styles.title}>Ponte en contacto con nosotros</h2>
-          <p style={styles.subtitle}>
-            Ingresa tu información y te responderemos lo antes posible.
-          </p>
+      <MainWrapper>
+        <div style={styles.container}>
+          {!enviado ? (
+            <>
+              <div style={styles.header}>
+                <img src="/logo_SERMEX_azul.fw.png" alt="Logo" style={styles.logo} />
+                <h2 style={styles.title}>Ponte en contacto con nosotros</h2>
+                <p style={styles.subtitle}>Ingresa tu información y te responderemos lo antes posible.</p>
+              </div>
+
+              {error && <div style={styles.error}>{error}</div>}
+
+              <form onSubmit={handleSubmit} autoComplete="off">
+                <div style={styles.formGroup}>
+                  <label style={styles.label} htmlFor="nombre">Nombre completo *</label>
+                  <input
+                    type="text"
+                    name="nombre"
+                    id="nombre"
+                    value={form.nombre}
+                    onChange={handleChange}
+                    required
+                    style={styles.input}
+                    placeholder="Ej: Juan Pérez"
+                    disabled={enviando}
+                  />
+                </div>
+
+                <div style={styles.formGroup}>
+                  <label style={styles.label} htmlFor="correo">Correo electrónico *</label>
+                  <input
+                    type="email"
+                    name="correo"
+                    id="correo"
+                    value={form.correo}
+                    onChange={handleChange}
+                    required
+                    style={styles.input}
+                    placeholder="tu.email@ejemplo.com"
+                    disabled={enviando}
+                  />
+                </div>
+
+                <div style={styles.formGroup}>
+                  <label style={styles.label} htmlFor="empresa">Empresa (opcional)</label>
+                  <input
+                    type="text"
+                    name="empresa"
+                    id="empresa"
+                    value={form.empresa}
+                    onChange={handleChange}
+                    style={styles.input}
+                    placeholder="Nombre de tu empresa"
+                    disabled={enviando}
+                  />
+                </div>
+
+                <div style={styles.formGroup}>
+                  <label style={styles.label} htmlFor="telefono">Número de teléfono *</label>
+                  <input
+                    type="tel"
+                    name="telefono"
+                    id="telefono"
+                    value={form.telefono}
+                    onChange={handleChange}
+                    required
+                    style={styles.input}
+                    placeholder="Ej: 5551234567"
+                    disabled={enviando}
+                  />
+                </div>
+
+                <div style={styles.formGroup}>
+                  <label style={styles.label} htmlFor="asunto">Asunto *</label>
+                  <input
+                    type="text"
+                    name="asunto"
+                    id="asunto"
+                    value={form.asunto}
+                    onChange={handleChange}
+                    required
+                    style={styles.input}
+                    placeholder="Título breve de tu solicitud"
+                    disabled={enviando}
+                  />
+                </div>
+
+                <div style={styles.formGroup}>
+                  <label style={styles.label} htmlFor="tipo">Tipo de solicitud *</label>
+                  <select
+                    name="tipo"
+                    id="tipo"
+                    value={form.tipo}
+                    onChange={handleChange}
+                    required
+                    style={styles.select}
+                    disabled={enviando}
+                  >
+                    <option value="">Selecciona una opción</option>
+                    <option value="soporte">Problema con producto</option>
+                    <option value="asesoria">Solicitar asesoría</option>
+                    <option value="experto">Hablar con un experto</option>
+                    <option value="informacion">Información</option>
+                    <option value="facturacion">Facturación</option>
+                    <option value="otro">Otro</option>
+                  </select>
+                </div>
+
+                <div style={styles.formGroup}>
+                  <label style={styles.label} htmlFor="descripcion">Descripción detallada del problema *</label>
+                  <textarea
+                    name="descripcion"
+                    id="descripcion"
+                    value={form.descripcion}
+                    onChange={handleChange}
+                    required
+                    style={styles.textarea}
+                    placeholder="Describe tu situación o problema con el mayor detalle posible."
+                    disabled={enviando}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  style={enviando ? styles.buttonDisabled : styles.button}
+                  onMouseOver={(e) => !enviando && (e.target.style.background = "linear-gradient(90deg, #2a3d59, #0f4aa3)")}
+                  onMouseOut={(e) => !enviando && (e.target.style.background = "linear-gradient(90deg, #345475, #1565c0)")}
+                  onMouseDown={(e) => !enviando && (e.target.style.transform = "scale(0.98)")}
+                  onMouseUp={(e) => !enviando && (e.target.style.transform = "scale(1)")}
+                  disabled={enviando}
+                >
+                  {enviando ? "Enviando..." : "Enviar solicitud"}
+                </button>
+              </form>
+            </>
+          ) : (
+            <div style={styles.success}>
+              <div style={styles.successIcon}>✅</div>
+              <h3 style={styles.successTitle}>¡Solicitud enviada con éxito!</h3>
+              <p style={styles.successMessage}>
+                Hemos recibido tu solicitud de contacto. Nos pondremos en contacto 
+                contigo en un plazo máximo de 24 horas hábiles.
+              </p>
+            </div>
+          )}
         </div>
-
-        {error && <div style={styles.error}>{error}</div>}
-
-        <form onSubmit={handleSubmit} autoComplete="off">
-          <div style={styles.formGroup}>
-            <label style={styles.label} htmlFor="nombre">Nombre completo *</label>
-            <input
-              type="text"
-              name="nombre"
-              id="nombre"
-              value={form.nombre}
-              onChange={handleChange}
-              required
-              style={styles.input}
-              placeholder="Ej: Juan Pérez"
-              disabled={enviando}
-            />
-          </div>
-
-          <div style={styles.formGroup}>
-            <label style={styles.label} htmlFor="correo">Correo electrónico *</label>
-            <input
-              type="email"
-              name="correo"
-              id="correo"
-              value={form.correo}
-              onChange={handleChange}
-              required
-              style={styles.input}
-              placeholder="tu.email@ejemplo.com"
-              disabled={enviando}
-            />
-          </div>
-
-          <div style={styles.formGroup}>
-            <label style={styles.label} htmlFor="empresa">Empresa (opcional)</label>
-            <input
-              type="text"
-              name="empresa"
-              id="empresa"
-              value={form.empresa}
-              onChange={handleChange}
-              style={styles.input}
-              placeholder="Nombre de tu empresa"
-              disabled={enviando}
-            />
-          </div>
-
-          <div style={styles.formGroup}>
-            <label style={styles.label} htmlFor="telefono">Número de teléfono *</label>
-            <input
-              type="tel"
-              name="telefono"
-              id="telefono"
-              value={form.telefono}
-              onChange={handleChange}
-              required
-              style={styles.input}
-              placeholder="Ej: 5551234567"
-              disabled={enviando}
-            />
-          </div>
-
-          <div style={styles.formGroup}>
-            <label style={styles.label} htmlFor="asunto">Asunto *</label>
-            <input
-              type="text"
-              name="asunto"
-              id="asunto"
-              value={form.asunto}
-              onChange={handleChange}
-              required
-              style={styles.input}
-              placeholder="Título breve de tu solicitud"
-              disabled={enviando}
-            />
-          </div>
-
-          <div style={styles.formGroup}>
-            <label style={styles.label} htmlFor="tipo">Tipo de solicitud *</label>
-            <select
-              name="tipo"
-              id="tipo"
-              value={form.tipo}
-              onChange={handleChange}
-              required
-              style={styles.select}
-              disabled={enviando}
-            >
-              <option value="">Selecciona una opción</option>
-              <option value="soporte">Problema con producto</option>
-              <option value="asesoria">Solicitar asesoría</option>
-              <option value="experto">Hablar con un experto</option>
-              <option value="informacion">Información</option>
-              <option value="facturacion">Facturación</option>
-              <option value="otro">Otro</option>
-            </select>
-          </div>
-
-          <div style={styles.formGroup}>
-            <label style={styles.label} htmlFor="descripcion">
-              Descripción detallada del problema *
-            </label>
-            <textarea
-              name="descripcion"
-              id="descripcion"
-              value={form.descripcion}
-              onChange={handleChange}
-              required
-              style={styles.textarea}
-              placeholder="Describe tu situación o problema con el mayor detalle posible."
-              disabled={enviando}
-            />
-          </div>
-
-          <button
-            type="submit"
-            style={enviando ? styles.buttonDisabled : styles.button}
-            onMouseOver={(e) => !enviando && (e.target.style.background = "linear-gradient(90deg, #2a3d59, #0f4aa3)")}
-            onMouseOut={(e) => !enviando && (e.target.style.background = "linear-gradient(90deg, #345475, #1565c0)")}
-            onMouseDown={(e) => !enviando && (e.target.style.transform = "scale(0.98)")}
-            onMouseUp={(e) => !enviando && (e.target.style.transform = "scale(1)")}
-            disabled={enviando}
-          >
-            {enviando ? "Enviando..." : "Enviar solicitud"}
-          </button>
-        </form>
-      </div>
+      </MainWrapper>
       <Footer />
     </div>
   );
 };
 
 export default PantallaSimple;
+
+const MainWrapper = ({ children }) => (
+  <main style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "flex-start", padding: "24px 0" }}>
+    {children}
+  </main>
+);

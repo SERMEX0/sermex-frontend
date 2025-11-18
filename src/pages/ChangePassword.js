@@ -111,161 +111,96 @@ const ChangePassword = () => {
   return (
     <Container>
       <Header />
-      <Card>
-        <LabelTitle>Cambia tu contraseña para mejorar la seguridad de tu cuenta.</LabelTitle>
-        <IconContainer>
-          <img 
-            src="/logo_SERMEX_azul.fw.png" 
-            alt="Logo" 
-            style={{ 
-              height: "88px",
-              filter: "drop-shadow(0 2px 8px rgba(52,84,117,0.13))"
-            }} 
-            onClick={() => navigate("/inicio")}
-          />
-        </IconContainer>
-        {error && <ErrorMessage>{error}</ErrorMessage>}
-        {success && <SuccessMessage>{success}</SuccessMessage>}
+      <Main>
+        <Card>
+          <LabelTitle>Cambia tu contraseña para mejorar la seguridad de tu cuenta.</LabelTitle>
+          <IconContainer>
+            <img 
+              src="/logo_SERMEX_azul.fw.png" 
+              alt="Logo" 
+              style={{ 
+                height: "88px",
+                filter: "drop-shadow(0 2px 8px rgba(52,84,117,0.13))"
+              }} 
+              onClick={() => navigate("/inicio")}
+            />
+          </IconContainer>
+          {error && <ErrorMessage>{error}</ErrorMessage>}
+          {success && <SuccessMessage>{success}</SuccessMessage>}
 
-        <Form onSubmit={handleSubmit} autoComplete="off">
-          <InputGroup>
-            <Label>Contraseña Actual</Label>
-            <PasswordContainer>
-              <Input
-                type={showCurrentPassword ? "text" : "password"}
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                required
-                placeholder="Ingresa tu contraseña actual"
-              />
-              <EyeIcon
-                onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                tabIndex={0}
-                aria-label="Mostrar/Ocultar contraseña actual"
-              >
-                {showCurrentPassword ? <FaEyeSlash /> : <FaEye />}
-              </EyeIcon>
-            </PasswordContainer>
-          </InputGroup>
-
-          <InputGroup>
-            <Label>Nueva Contraseña</Label>
-            <PasswordContainer>
-              <Input
-                type={showNewPassword ? "text" : "password"}
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                required
-                placeholder="Mínimo 6 caracteres"
-                minLength="6"
-              />
-              <EyeIcon
-                onClick={() => setShowNewPassword(!showNewPassword)}
-                tabIndex={0}
-                aria-label="Mostrar/Ocultar nueva contraseña"
-              >
-                {showNewPassword ? <FaEyeSlash /> : <FaEye />}
-              </EyeIcon>
-            </PasswordContainer>
-          </InputGroup>
-
-          <InputGroup>
-            <Label>Confirmar Nueva Contraseña</Label>
-            <PasswordContainer>
-              <Input
-                type={showConfirmPassword ? "text" : "password"}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                placeholder="Repite tu nueva contraseña"
-                minLength="6"
-              />
-              <EyeIcon
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                tabIndex={0}
-                aria-label="Mostrar/Ocultar confirmación"
-              >
-                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-              </EyeIcon>
-            </PasswordContainer>
-          </InputGroup>
-
-          <Button type="submit" disabled={loading} $loading={loading}>
-            {loading ? "Cambiando..." : "Cambiar Contraseña"}
-          </Button>
-      
-          {/* ------ FLUJO MODAL EMAIL RECUPERACIÓN -------- */}
-          <FooterText>
-            ¿Olvidaste tu contraseña?{" "}
-            <FooterLink
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                setShowResetForm(true);
-                setResetSuccess("");
-                setResetError("");
-              }}
-            >
-              Restablécela aquí
-            </FooterLink>
-          </FooterText>
-        </Form>
-
-        {showResetForm && (
-          <div
-            style={{
-              background: "#f8fafe",
-              borderRadius: 8,
-              boxShadow: "0 4px 22px rgba(52,84,117,0.09)",
-              margin: "16px auto",
-              padding: "20px",
-              maxWidth: "360px"
-            }}>
-            <form onSubmit={handlePasswordReset}>
-              <div style={{ marginBottom: 8 }}>
-                <label style={{ fontWeight: 500 }}>
-                  Escribe tu correo para restablecer la contraseña:
-                </label>
-                <input
-                  type="email"
-                  value={resetEmail}
-                  onChange={e => setResetEmail(e.target.value)}
+          <Form onSubmit={handleSubmit} autoComplete="off">
+            <InputGroup>
+              <Label>Contraseña Actual</Label>
+              <PasswordContainer>
+                <Input
+                  type={showCurrentPassword ? "text" : "password"}
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
                   required
-                  placeholder="Tu correo electrónico"
-                  style={{
-                    width: "100%", border: "1px solid #cdddec", padding: 8, borderRadius: 7, marginTop: 6
-                  }}
+                  placeholder="Ingresa tu contraseña actual"
                 />
-              </div>
-              <button
-                type="submit"
-                disabled={resetLoading}
-                style={{
-                  background: resetLoading ? "#bbb" : "linear-gradient(90deg,#345475 80%,#4474B0 100%)",
-                  color: "#fff", border: "none", borderRadius: 8, padding: "11px 24px",
-                  fontWeight: 600, marginBottom: 8, cursor: resetLoading ? "not-allowed" : "pointer"
-                }}
-              >
-                {resetLoading ? "Enviando..." : "Enviar correo de recuperación"}
-              </button>
-              <button
-                type="button"
-                onClick={() => setShowResetForm(false)}
-                style={{
-                  background: "transparent", color: "#345475", border: "none",
-                  textDecoration: "underline", cursor: "pointer"
-                }}
-              >
-                Cancelar
-              </button>
-              {resetError && <ErrorMessage>{resetError}</ErrorMessage>}
-              {resetSuccess && <SuccessMessage>{resetSuccess}</SuccessMessage>}
-            </form>
-          </div>
-        )}
+                <EyeIcon
+                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                  tabIndex={0}
+                  aria-label="Mostrar/Ocultar contraseña actual"
+                >
+                  {showCurrentPassword ? <FaEyeSlash /> : <FaEye />}
+                </EyeIcon>
+              </PasswordContainer>
+            </InputGroup>
 
-      </Card>
-      <Footer/>
+            <InputGroup>
+              <Label>Nueva Contraseña</Label>
+              <PasswordContainer>
+                <Input
+                  type={showNewPassword ? "text" : "password"}
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                  placeholder="Mínimo 6 caracteres"
+                  minLength="6"
+                />
+                <EyeIcon
+                  onClick={() => setShowNewPassword(!showNewPassword)}
+                  tabIndex={0}
+                  aria-label="Mostrar/Ocultar nueva contraseña"
+                >
+                  {showNewPassword ? <FaEyeSlash /> : <FaEye />}
+                </EyeIcon>
+              </PasswordContainer>
+            </InputGroup>
+
+            <InputGroup>
+              <Label>Confirmar Nueva Contraseña</Label>
+              <PasswordContainer>
+                <Input
+                  type={showConfirmPassword ? "text" : "password"}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  placeholder="Repite tu nueva contraseña"
+                  minLength="6"
+                />
+                <EyeIcon
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  tabIndex={0}
+                  aria-label="Mostrar/Ocultar confirmación"
+                >
+                  {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                </EyeIcon>
+              </PasswordContainer>
+            </InputGroup>
+
+            <Button type="submit" disabled={loading} $loading={loading}>
+              {loading ? "Cambiando..." : "Cambiar Contraseña"}
+            </Button>
+        
+            {/* ------ FLUJO MODAL EMAIL RECUPERACIÓN -------- */}
+            
+          </Form>
+        </Card>
+      </Main>
+      <Footer />
     </Container>
   );
 };
@@ -275,10 +210,18 @@ export default ChangePassword;
 // ---- Styled Components (100% responsivo) ----
 
 const Container = styled.div`
-  min-height: 97vh;
+  min-height: 100vh; /* importante: ocupar todo el viewport */
   background: linear-gradient(135deg, #e9f1fa 60%, #f9fafc 100%);
   display: flex;
   flex-direction: column;
+`;
+
+const Main = styled.main`
+  flex: 1 1 auto; /* ocupa el espacio restante entre header y footer */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 24px 0;
 `;
 
 const Card = styled.div`
@@ -419,6 +362,7 @@ const SuccessMessage = styled.div`
   font-weight: 500;
 `;
 
+/* Si quieres usar un footer local, funcionaría así: */
 const FooterStyled = styled.footer`
   background: linear-gradient(90deg, #345475 78%, #4474B0 100%);
   color: #fff;

@@ -46,17 +46,19 @@ const Manual = () => {
     return (
       <MainContainer>
         <Header />
-        <HeroSkeleton>
-          <div>
-            <Skeleton height={220} width={260} style={{ borderRadius: 18 }} />
-          </div>
-          <div style={{ flex: 1, marginLeft: 32 }}>
-            <Skeleton height={40} width={320} style={{ marginBottom: 18 }} />
-            <Skeleton height={25} count={3} width="80%" style={{ marginBottom: 10 }} />
-            <Skeleton height={20} count={2} width="60%" style={{ marginBottom: 10 }} />
-          </div>
-        </HeroSkeleton>
-        <Skeleton style={{marginTop: 32, borderRadius: 18}} height={350} />
+        <Main>
+          <HeroSkeleton>
+            <div>
+              <Skeleton height={220} width={260} style={{ borderRadius: 18 }} />
+            </div>
+            <div style={{ flex: 1, marginLeft: 32 }}>
+              <Skeleton height={40} width={320} style={{ marginBottom: 18 }} />
+              <Skeleton height={25} count={3} width="80%" style={{ marginBottom: 10 }} />
+              <Skeleton height={20} count={2} width="60%" style={{ marginBottom: 10 }} />
+            </div>
+          </HeroSkeleton>
+          <Skeleton style={{marginTop: 32, borderRadius: 18}} height={350} />
+        </Main>
         <Footer />
       </MainContainer>
     );
@@ -65,177 +67,179 @@ const Manual = () => {
   return (
     <MainContainer>
       <Header />
-      <HeroSection>
-        <HeroImageContainer>
-          {mainImage ? (
-            <HeroImage
-              src={mainImage}
-              alt="Producto"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = 'https://via.placeholder.com/400x300?text=Imagen+no+disponible';
+      <Main>
+        <HeroSection>
+          <HeroImageContainer>
+            {mainImage ? (
+              <HeroImage
+                src={mainImage}
+                alt="Producto"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = 'https://via.placeholder.com/400x300?text=Imagen+no+disponible';
+                }}
+              />
+            ) : (
+              <ImagePlaceholder>
+                <FaTools size={52} />
+                <span>Imagen no disponible</span>
+              </ImagePlaceholder>
+            )}
+          </HeroImageContainer>
+          <HeroDetails>
+            <h1>{producto.Nombre || "Producto sin nombre"}</h1>
+            <HeroInfo>
+              {producto.Modelo && (
+                <InfoBox>
+                  <strong>Modelo</strong>
+                  <span>{producto.Modelo}</span>
+                </InfoBox>
+              )}
+              {producto["Número de serie"] && (
+                <InfoBox>
+                  <strong>Serie</strong>
+                  <span>{producto["Número de serie"]}</span>
+                </InfoBox>
+              )}
+              {producto["Fecha de compra"] && (
+                <InfoBox>
+                  <strong>Compra</strong>
+                  <span>{producto["Fecha de compra"]}</span>
+                </InfoBox>
+              )}
+            </HeroInfo>
+            <HeroDesc>
+              Recibe asesoria o mantenimiento para tu producto. 
+            </HeroDesc>
+          </HeroDetails>
+          <SoporteBtn
+            title="Soporte rápido"
+            onClick={() => window.open('mailto:info@sermex.mx', '_blank')}
+          >
+            <FaLifeRing size={20} /> Solicitar soporte por correo
+          </SoporteBtn>
+        </HeroSection>
+
+        <FadeSection>
+          <CardsFlex>
+            <InfoCardVibrant
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                minHeight: "400px",
               }}
-            />
-          ) : (
-            <ImagePlaceholder>
-              <FaTools size={52} />
-              <span>Imagen no disponible</span>
-            </ImagePlaceholder>
-          )}
-        </HeroImageContainer>
-        <HeroDetails>
-          <h1>{producto.Nombre || "Producto sin nombre"}</h1>
-          <HeroInfo>
-            {producto.Modelo && (
-              <InfoBox>
-                <strong>Modelo</strong>
-                <span>{producto.Modelo}</span>
-              </InfoBox>
-            )}
-            {producto["Número de serie"] && (
-              <InfoBox>
-                <strong>Serie</strong>
-                <span>{producto["Número de serie"]}</span>
-              </InfoBox>
-            )}
-            {producto["Fecha de compra"] && (
-              <InfoBox>
-                <strong>Compra</strong>
-                <span>{producto["Fecha de compra"]}</span>
-              </InfoBox>
-            )}
-          </HeroInfo>
-          <HeroDesc>
-            Recibe asesoria o mantenimiento para tu producto. 
-          </HeroDesc>
-        </HeroDetails>
-        <SoporteBtn
-          title="Soporte rápido"
-          onClick={() => window.open('mailto:info@sermex.mx', '_blank')}
-        >
-          <FaLifeRing size={20} /> Solicitar soporte por correo
-        </SoporteBtn>
-      </HeroSection>
-
-      <FadeSection>
-        <CardsFlex>
-          <InfoCardVibrant
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              minHeight: "400px",
-            }}
-          >
-            <div>
-              <SectionTitle>
-                <FaTools /> Mantenimiento
-                <Badge preventivo>PREVENTIVO</Badge>
-              </SectionTitle>
-              <InfoSubtitle>
-                Pruebas antes de solicitar mantenimiento
-              </InfoSubtitle>
-              <InfoText>
-                {Array.isArray(producto["Mantenimiento preventivo"]) ? (
-                  <ul>
-                    {producto["Mantenimiento preventivo"].map((item, index) => (
-                      <li key={index}>{item}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p>
-                    {producto["Mantenimiento preventivo"] || "No hay información específica disponible sobre mantenimiento preventivo para este producto."}
-                  </p>
+            >
+              <div>
+                <SectionTitle>
+                  <FaTools /> Mantenimiento
+                  <Badge preventivo>PREVENTIVO</Badge>
+                </SectionTitle>
+                <InfoSubtitle>
+                  Pruebas antes de solicitar mantenimiento
+                </InfoSubtitle>
+                <InfoText>
+                  {Array.isArray(producto["Mantenimiento preventivo"]) ? (
+                    <ul>
+                      {producto["Mantenimiento preventivo"].map((item, index) => (
+                        <li key={index}>{item}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>
+                      {producto["Mantenimiento preventivo"] || "No hay información específica disponible sobre mantenimiento preventivo para este producto."}
+                    </p>
+                  )}
+                </InfoText>
+                {producto["Frecuencia mantenimiento"] && (
+                  <DetailItem>
+                    <FaCalendarAlt style={{ marginRight: 7, color: "#10b981" }} />
+                    <span><strong>Frecuencia:</strong> {producto["Frecuencia mantenimiento"]}</span>
+                  </DetailItem>
                 )}
-              </InfoText>
-              {producto["Frecuencia mantenimiento"] && (
-                <DetailItem>
-                  <FaCalendarAlt style={{ marginRight: 7, color: "#10b981" }} />
-                  <span><strong>Frecuencia:</strong> {producto["Frecuencia mantenimiento"]}</span>
-                </DetailItem>
-              )}
-            </div>
+              </div>
 
-            <div style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
-              <button
-                onClick={() => navigate("/asesoria")}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "10px 20px",
-                  fontSize: "1rem",
-                  cursor: "pointer",
-                  backgroundColor: "#10b981",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "8px",
-                  transition: "background-color 0.3s ease",
-                }}
-                onMouseOver={(e) => (e.target.style.backgroundColor = "#0d946a")}
-                onMouseOut={(e) => (e.target.style.backgroundColor = "#10b981")}
-              >
-                <FaLifeRing /> Solicitar asesoría
-              </button>
-            </div>
-          </InfoCardVibrant>
+              <div style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
+                <button
+                  onClick={() => navigate("/asesoria")}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    padding: "10px 20px",
+                    fontSize: "1rem",
+                    cursor: "pointer",
+                    backgroundColor: "#10b981",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "8px",
+                    transition: "background-color 0.3s ease",
+                  }}
+                  onMouseOver={(e) => (e.target.style.backgroundColor = "#0d946a")}
+                  onMouseOut={(e) => (e.target.style.backgroundColor = "#10b981")}
+                >
+                  <FaLifeRing /> Solicitar asesoría
+                </button>
+              </div>
+            </InfoCardVibrant>
 
-          <CardSeparator>
-            <FaTools size={38} color="#60a5fa" />
-          </CardSeparator>
+            <CardSeparator>
+              <FaTools size={38} color="#60a5fa" />
+            </CardSeparator>
 
-          <InfoCardVibrant
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              minHeight: "400px",
-            }}
-          >
-            <div>
-              <SectionTitle>
-                <FaTools /> Mantenimiento
-                <Badge correctivo>CORRECTIVO</Badge>
-              </SectionTitle>
-              <InfoSubtitle>
-                Si tu equipo sigue fallando, ofrecemos soporte técnico.
-              </InfoSubtitle>
-              <InfoText>
-                {producto["Mantenimiento correctivo"] || "No hay información específica disponible sobre mantenimiento correctivo para este producto."}
-              </InfoText>
-              {producto["Tiempo respuesta"] && (
-                <DetailItem>
-                  <FaCalendarAlt style={{ marginRight: 7, color: "#3b82f6" }} />
-                  <span><strong>Respuesta:</strong> {producto["Tiempo respuesta"]}</span>
-                </DetailItem>
-              )}
-            </div>
+            <InfoCardVibrant
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                minHeight: "400px",
+              }}
+            >
+              <div>
+                <SectionTitle>
+                  <FaTools /> Mantenimiento
+                  <Badge correctivo>CORRECTIVO</Badge>
+                </SectionTitle>
+                <InfoSubtitle>
+                  Si tu equipo sigue fallando, ofrecemos soporte técnico.
+                </InfoSubtitle>
+                <InfoText>
+                  {producto["Mantenimiento correctivo"] || "No hay información específica disponible sobre mantenimiento correctivo para este producto."}
+                </InfoText>
+                {producto["Tiempo respuesta"] && (
+                  <DetailItem>
+                    <FaCalendarAlt style={{ marginRight: 7, color: "#3b82f6" }} />
+                    <span><strong>Respuesta:</strong> {producto["Tiempo respuesta"]}</span>
+                  </DetailItem>
+                )}
+              </div>
 
-            <div style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
-              <button
-                onClick={() => navigate("/Rma")}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "10px 20px",
-                  fontSize: "1rem",
-                  cursor: "pointer",
-                  backgroundColor: "#3b82f6",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "8px",
-                  transition: "background-color 0.3s ease",
-                }}
-                onMouseOver={(e) => (e.target.style.backgroundColor = "#316fd4")}
-                onMouseOut={(e) => (e.target.style.backgroundColor = "#3b82f6")}
-              >
-                <FaWrench /> Solicitar reparación
-              </button>
-            </div>
-          </InfoCardVibrant>
-        </CardsFlex>
-      </FadeSection>
+              <div style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
+                <button
+                  onClick={() => navigate("/Rma")}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    padding: "10px 20px",
+                    fontSize: "1rem",
+                    cursor: "pointer",
+                    backgroundColor: "#3b82f6",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "8px",
+                    transition: "background-color 0.3s ease",
+                  }}
+                  onMouseOver={(e) => (e.target.style.backgroundColor = "#316fd4")}
+                  onMouseOut={(e) => (e.target.style.backgroundColor = "#3b82f6")}
+                >
+                  <FaWrench /> Solicitar reparación
+                </button>
+              </div>
+            </InfoCardVibrant>
+          </CardsFlex>
+        </FadeSection>
+      </Main>
       <Footer />
     </MainContainer>
   );
@@ -255,6 +259,15 @@ const MainContainer = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+`;
+
+/* Nuevo: Main que empuja el footer hacia abajo */
+const Main = styled.main`
+  flex: 1 1 auto; /* ocupa el espacio restante entre Header y Footer */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 0;
 `;
 
 const HeroSection = styled.section`
