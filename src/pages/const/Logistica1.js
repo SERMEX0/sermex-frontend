@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import Header from "../../components/Header2";
@@ -6,26 +6,26 @@ import Header from "../../components/Header2";
 const estadoInfo = {
   recibido: {
     text: 'El producto llegó a SERMEX, pronto empezará la revisión.',
-    color: '#1976d2',
-    bg: 'linear-gradient(90deg,#e3f2fd,#ffffff)',
+    color: '#0B63CE',
+    bg: 'linear-gradient(90deg,#E8F4FF,#FFFFFF)',
     icon: '📦',
   },
   en_revision: {
     text: 'El producto se encuentra en revisión. Actualmente se están reportando y descartando fallas.',
-    color: '#ff8f00',
-    bg: 'linear-gradient(90deg,#fff3e1,#ffffff)',
+    color: '#B86B00',
+    bg: 'linear-gradient(90deg,#FFF6EA,#FFFFFF)',
     icon: '🔎',
   },
   reparacion: {
     text: 'El producto se encuentra en proceso de reparación.',
-    color: '#388e3c',
-    bg: 'linear-gradient(90deg,#e8f5e9,#ffffff)',
+    color: '#117A37',
+    bg: 'linear-gradient(90deg,#F0FBF3,#FFFFFF)',
     icon: '🛠️',
   },
   completado: {
     text: 'El producto está listo y ya ha sido enviado de vuelta.',
-    color: '#00acc1',
-    bg: 'linear-gradient(90deg,#e0f7fa,#ffffff)',
+    color: '#007E8A',
+    bg: 'linear-gradient(90deg,#E8F8FA,#FFFFFF)',
     icon: '✅',
   },
 };
@@ -37,7 +37,7 @@ const Logistica = () => {
   const [userEmail, setUserEmail] = useState('');
   const [loading, setLoading] = useState(true);
   const [modalPedido, setModalPedido] = useState(null);
-  const API_URL = process.env.REACT_APP_API_URL;
+  const API_URL = process.env.REACT_APP_API_URL || '';
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -47,44 +47,62 @@ const Logistica = () => {
     }
     try {
       const decoded = jwtDecode(token);
-      const email = decoded.correo || decoded.email || '';
+      const email = decoded?.correo || decoded?.email || '';
       setUserEmail(email);
 
-      axios.get(`${API_URL}/api/logistica/${email}`, {
+      axios.get(`${API_URL}/api/logistica/${encodeURIComponent(email)}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       .then(res => {
-        setPedidos(res.data || []);
+        setPedidos(Array.isArray(res.data) ? res.data : []);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
-
-    } catch {
+      .catch(err => {
+        console.error('Error fetching pedidos:', err);
+        setPedidos([]);
+        setLoading(false);
+      });
+    } catch (err) {
+      console.error('Error decoding token:', err);
       setLoading(false);
     }
-  }, []);
+  }, [API_URL]);
 
-  // Pedidos filtrados: solo los completados si no han pasado más de 5 días desde su última actualización
+  // Filtrar pedidos: solo mostrar los "completados" si NO han pasado más de 5 días desde su última actualización
   const now = new Date();
-  const pedidosFiltrados = pedidos.filter(pedido => {
+  const pedidosFiltrados = (pedidos || []).filter(pedido => {
+    if (!pedido) return false;
     if (pedido.estado !== 'completado') return true;
-    const fechaActualizacion = new Date(pedido.fecha_actualizacion);
+    const fechaActualizacion = pedido.fecha_actualizacion ? new Date(pedido.fecha_actualizacion) : null;
+    if (!fechaActualizacion) return false;
     const diasPasados = (now - fechaActualizacion) / (1000 * 60 * 60 * 24);
     return diasPasados <= 5;
   });
 
-  const getStatusStyle = (estado) => {
-    // Solo para las chips/etiquetas
-    const info = estadoInfo[estado];
+  const getStatusPillStyle = (estado) => {
+    const info = estadoInfo[estado] || {};
     return {
-      backgroundColor: info ? info.bg.split(",")[0].replace("linear-gradient(90deg,","").replace("#","") : "#eee",
-      color: info ? info.color : "#555",
-      padding: '1px 10px',
-      borderRadius: '12px',
-      fontWeight: 500,
-      fontSize: '12.5px'
+      background: info.bg || '#F3F4F6',
+      color: info.color || '#374151',
+      padding: '6px 10px',
+      borderRadius: 999,
+      fontWeight: 600,
+      fontSize: 13,
+      display: 'inline-block'
     };
   };
+
+  const openModal = (pedido) => setModalPedido(pedido);
+  const closeModal = useCallback(() => setModalPedido(null), []);
+
+  useEffect(() => {
+    if (!modalPedido) return;
+    const onKey = (e) => {
+      if (e.key === 'Escape') closeModal();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [modalPedido, closeModal]);
 
   if (loading) {
     return (
@@ -100,123 +118,140 @@ const Logistica = () => {
       <Header />
       <div style={styles.container}>
         <h2 style={styles.title}>Seguimiento de Tus Equipos</h2>
-        <p style={styles.subtitle}>Mostrando resultados para: {userEmail}</p>
+        <p style={styles.subtitle}>Mostrando resultados para: <span style={styles.emailText}>{userEmail || '—'}</span></p>
+
         {pedidosFiltrados.length === 0 ? (
-          <div style={styles.emptyState}>
-            No hay pedidos registrados para este correo.
-          </div>
+          <div style={styles.emptyState}>No hay pedidos registrados para este correo.</div>
         ) : (
           <div style={styles.grid}>
-            {pedidosFiltrados.map(pedido => (
-              <div
-                key={pedido.id}
-                style={styles.card}
-                onClick={() => setModalPedido(pedido)}
-                tabIndex={0}
-                role="button"
-                aria-label="Ver detalles"
-              >
-                <h3 style={styles.productName}>{pedido.producto}</h3>
-                <p style={styles.rmaText}>Folio RMA: <strong>{pedido.rma_id}</strong></p>
-                <div style={styles.statusContainer}>
-                  <span style={getStatusStyle(pedido.estado)}>
-                    {pedido.estado.replace('_', ' ').toUpperCase()}
-                  </span>
-                  <div style={styles.timeline}>
-                    {estadosOrdenados.map(estado => (
-                      <div 
-                        key={estado}
-                        style={{
-                          ...styles.timelineStep,
-                          ...(pedido.estado === estado ? styles.activeStep : {}),
-                          ...(estadosOrdenados.indexOf(pedido.estado) > estadosOrdenados.indexOf(estado) ? styles.completedStep : {})
-                        }}
-                      />
-                    ))}
+            {pedidosFiltrados.map((pedido, idx) => {
+              const key = pedido?.id ?? pedido?.rma_id ?? idx;
+              const estado = pedido?.estado || 'desconocido';
+              return (
+                <article
+                  key={key}
+                  style={styles.card}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => openModal(pedido)}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(pedido); } }}
+                  aria-label={`Ver detalles RMA ${pedido?.rma_id ?? key}`}
+                >
+                  <div style={styles.cardHeader}>
+                    <div>
+                      <h3 style={styles.productName}>{pedido.producto || 'Sin nombre'}</h3>
+                      <div style={styles.rmaText}>Folio RMA: <strong>{pedido.rma_id ?? '—'}</strong></div>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={getStatusPillStyle(estado)}>
+                        {estado.replace('_', ' ').toUpperCase()}
+                      </div>
+                      <div style={styles.updateSmall}>Última: {pedido.fecha_actualizacion ? new Date(pedido.fecha_actualizacion).toLocaleDateString() : '—'}</div>
+                    </div>
                   </div>
-                </div>
-                <p style={styles.updateText}>
-                  Última actualización: {new Date(pedido.fecha_actualizacion).toLocaleString()}
-                </p>
-              </div>
-            ))}
+
+                  <div style={styles.cardBody}>
+                    <p style={styles.cardSnippet}>{estadoInfo[estado]?.text ?? 'Estado no documentado.'}</p>
+
+                    <div style={styles.timeline}>
+                      {estadosOrdenados.map((e, i) => {
+                        const idxPedido = estadosOrdenados.indexOf(estado);
+                        const completed = idxPedido > i;
+                        const active = estado === e;
+                        return (
+                          <div key={e} style={styles.timelineItem}>
+                            <div style={{
+                              ...styles.timelineDot,
+                              background: active ? '#0B63CE' : (completed ? '#9CA3AF' : '#E5E7EB'),
+                              boxShadow: active ? '0 2px 8px rgba(11,99,206,0.2)' : 'none'
+                            }} />
+                            <div style={styles.timelineLabel}>{e.replace('_', ' ')}</div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         )}
       </div>
 
-      {/* Modal Pro+Diseño */}
+      {/* Modal profesional */}
       {modalPedido && (
-        <div style={styles.modalBg} onClick={() => setModalPedido(null)}>
+        <div style={styles.modalBg} onMouseDown={closeModal}>
           <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Detalles RMA ${modalPedido.rma_id ?? ''}`}
             style={{
               ...styles.modal,
-              background: estadoInfo[modalPedido.estado]?.bg,
-              animation: 'modalIn 0.23s'
+              background: estadoInfo[modalPedido.estado]?.bg || '#fff'
             }}
-            onClick={e => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
           >
-            <button style={styles.modalClose} onClick={() => setModalPedido(null)}>
-              <span style={{fontSize: "22px", fontWeight: "bold"}}>&times;</span>
+            <button style={styles.modalClose} onClick={closeModal} aria-label="Cerrar">
+              ✕
             </button>
-            
-            {/* Encabezado moderno con icono grande */}
-            <div style={{
-              ...styles.modalHeader,
-              color: estadoInfo[modalPedido.estado]?.color
-            }}>
+
+            <div style={{ ...styles.modalHeader, color: estadoInfo[modalPedido.estado]?.color || '#111' }}>
               <span style={styles.modalIcon}>{estadoInfo[modalPedido.estado]?.icon}</span>
-              <span style={styles.modalEstado}>{modalPedido.estado.replace('_', ' ').toUpperCase()}</span>
+              <div>
+                <div style={styles.modalEstado}>{(modalPedido.estado || 'DESCONOCIDO').replace('_', ' ').toUpperCase()}</div>
+                <div style={styles.modalSubtitle}>{estadoInfo[modalPedido.estado]?.text}</div>
+              </div>
             </div>
 
-            {/* Barra de progreso vertical ilustrando estados */}
-            <div style={styles.estadoVertContainer}>
-              {estadosOrdenados.map((estado, idx) => (
-                <div key={estado} style={{
-                  ...styles.estadoVertStep,
-                  background: idx < estadosOrdenados.indexOf(modalPedido.estado) ? estadoInfo[estado].color : "#ddd",
-                  boxShadow: idx === estadosOrdenados.indexOf(modalPedido.estado) ? "0 0 6px "+estadoInfo[estado].color : "",
-                }}>
-                  <span style={{
-                    ...styles.estadoVertIcon,
-                    filter: idx === estadosOrdenados.indexOf(modalPedido.estado) ? 'brightness(1.2)' : 'brightness(0.8)'
-                  }}>{estadoInfo[estado].icon}</span>
-                  <span style={{
-                    ...styles.estadoVertLabel,
-                    fontWeight: idx === estadosOrdenados.indexOf(modalPedido.estado) ? 600 : 400,
-                  }}>{estado.replace('_', ' ')}</span>
-                </div>
-              ))}
-            </div>
-            
-            {/* Separador visual */}
-            <div style={styles.modalLine}></div>
+            <div style={styles.modalLine} />
 
-            {/* Info principal con jerarquía */}
             <div style={styles.modalInfoBlock}>
-              <h3 style={styles.modalTitle}>{modalPedido.producto}</h3>
-              <div style={styles.modalLabel}>{estadoInfo[modalPedido.estado]?.text}</div>
+              <h3 style={styles.modalTitle}>{modalPedido.producto || 'Producto'}</h3>
               <div style={styles.modalDetails}>
                 <div>
                   <span style={styles.modalDetailName}>Folio RMA:</span>{" "}
-                  <span style={styles.modalDetailValue}>{modalPedido.rma_id}</span>
+                  <span style={styles.modalDetailValue}>{modalPedido.rma_id ?? '—'}</span>
                 </div>
+
                 <div>
                   <span style={styles.modalDetailName}>Última actualización:</span>{" "}
-                  <span style={styles.modalDetailValue}>{new Date(modalPedido.fecha_actualizacion).toLocaleString()}</span>
+                  <span style={styles.modalDetailValue}>{modalPedido.fecha_actualizacion ? new Date(modalPedido.fecha_actualizacion).toLocaleString() : '—'}</span>
+                </div>
+
+                {/* Solo mostrar Recepción si existe */}
+                {modalPedido.fecha_recepcion && (
+                  <div>
+                    <span style={styles.modalDetailName}>Recepción:</span>{" "}
+                    <span style={styles.modalDetailValue}>{new Date(modalPedido.fecha_recepcion).toLocaleString()}</span>
+                  </div>
+                )}
+
+                {/* Solo mostrar Contacto si existe */}
+                {(modalPedido.contacto || modalPedido.telefono) && (
+                  <div>
+                    <span style={styles.modalDetailName}>Contacto:</span>{" "}
+                    <span style={styles.modalDetailValue}>{modalPedido.contacto || modalPedido.telefono}</span>
+                  </div>
+                )}
+
+                <div style={{ marginTop: 10 }}>
+                  <div style={{ marginBottom: 8, color: '#374151', fontWeight: 700 }}>Progreso</div>
+                  <div style={styles.progressBar}>
+                    {estadosOrdenados.map((e, i) => {
+                      const idxPedido = estadosOrdenados.indexOf(modalPedido.estado);
+                      const filled = i <= idxPedido;
+                      return <div key={e} style={{ ...styles.progressSegment, background: filled ? '#0B63CE' : '#E5E7EB' }} />;
+                    })}
+                  </div>
                 </div>
               </div>
             </div>
+
+            <div style={styles.modalFooter}>
+              <button onClick={closeModal} style={styles.actionSecondary}>Cerrar</button>
+              <a href={`/rma/${modalPedido.rma_id ?? ''}`} style={styles.actionPrimary}>Ver RMA</a>
+            </div>
           </div>
-          
-          {/* Animación */}
-          <style>
-            {`
-              @keyframes modalIn {
-                0% { transform: scale(0.85); opacity: 0; }
-                100% { transform: scale(1); opacity: 1; }
-              }
-            `}
-          </style>
         </div>
       )}
     </>
@@ -230,225 +265,233 @@ const styles = {
     minHeight: '100vh',
     padding: '20px',
     width: '100%',
-    maxWidth: '1500px',
+    maxWidth: '1200px',
     margin: '0 auto',
-    fontFamily: 'Arial, sans-serif',
+    fontFamily: 'Inter, Arial, sans-serif',
   },
   title: {
-    color: '#2c3e50',
-    marginBottom: '10px',
-    textAlign: 'center'
+    color: '#0F172A',
+    marginBottom: '6px',
+    textAlign: 'center',
+    fontSize: 20
   },
   subtitle: {
-    color: '#7f8c8d',
-    marginBottom: '30px',
-    fontSize: '14px',
+    color: '#6B7280',
+    marginBottom: '18px',
+    fontSize: 13,
     textAlign: 'center'
   },
+  emailText: {
+    color: '#111827',
+    fontWeight: 600
+  },
+
   loading: {
     textAlign: 'center',
     padding: '40px',
     fontSize: '18px',
-    color: '#555',
-    width: '100%'
+    color: '#374151'
   },
   emptyState: {
     textAlign: 'center',
     padding: '40px',
-    color: '#666',
+    color: '#6B7280',
     fontSize: '16px',
-    border: '1px dashed #ddd',
-    borderRadius: '8px'
+    background: '#FFFFFF',
+    border: '1px solid #E6E9EF',
+    borderRadius: 10
   },
-  grid: { 
-    display: 'grid', 
+
+  grid: {
+    display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-    gap: '20px',
-    marginTop: '20px'
+    gap: 20
   },
+
   card: {
-    border: '1px solid #e0e0e0',
-    borderRadius: '8px',
-    padding: '20px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.08)',
-    backgroundColor: '#fff',
-    transition: 'transform 0.2s',
+    background: '#FFFFFF',
+    borderRadius: 12,
+    padding: 18,
+    boxShadow: '0 6px 18px rgba(15,23,42,0.06)',
     cursor: 'pointer',
-    position: 'relative',
+    transition: 'transform 0.14s ease, box-shadow 0.14s ease',
+    border: '1px solid rgba(15,23,42,0.04)',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between'
+  },
+  cardHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    gap: 12
   },
   productName: {
-    marginTop: '0',
-    color: '#345475',
-    fontSize: '18px'
+    margin: 0,
+    fontSize: 16,
+    color: '#0F172A'
   },
   rmaText: {
-    color: '#555',
-    fontSize: '14px',
-    marginBottom: '15px'
+    marginTop: 6,
+    color: '#6B7280',
+    fontSize: 13
   },
-  statusContainer: { 
-    margin: '20px 0',
-    display: 'flex', flexDirection: 'column', gap: 6
+  updateSmall: {
+    marginTop: 6,
+    color: '#9CA3AF',
+    fontSize: 12
   },
+
+  cardBody: {
+    marginTop: 12
+  },
+  cardSnippet: {
+    margin: '0 0 12px 0',
+    color: '#374151',
+    fontSize: 14
+  },
+
   timeline: {
     display: 'flex',
     justifyContent: 'space-between',
-    height: '6px',
-    backgroundColor: '#f0f0f0',
-    borderRadius: '3px',
-    margin: '10px 0',
+    gap: 8,
+    alignItems: 'center'
   },
-  timelineStep: {
-    width: '23%',
-    height: '6px',
-    borderRadius: '3px',
-    transition: 'background-color 0.3s ease'
+  timelineItem: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    flex: 1,
+    minWidth: 0
   },
-  activeStep: {
-    backgroundColor: '#345475',
-    transform: 'scaleY(1.14)'
+  timelineDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 12
   },
-  completedStep: {
-    backgroundColor: '#b0b0b0'
-  },
-  updateText: {
-    color: '#666',
-    fontSize: '13px',
-    marginBottom: '0',
-    fontStyle: 'italic'
+  timelineLabel: {
+    marginTop: 6,
+    fontSize: 11,
+    color: '#6B7280',
+    textTransform: 'capitalize'
   },
 
-  // MODAL styles
+  /* Modal styles */
   modalBg: {
     position: 'fixed',
-    top: 0, left: 0, width: '100vw', height: '100vh',
-    background: 'rgba(60,68,90,0.28)',
+    inset: 0,
+    background: 'rgba(2,6,23,0.45)',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 1001,
+    zIndex: 1200,
+    padding: 20
   },
   modal: {
-    borderRadius: '20px',
-    boxShadow: '0 8px 28px rgba(50,52,96,0.16)',
-    minWidth: '320px',
-    maxWidth: '95vw',
-    width: '390px',
-    padding: '36px 30px 22px',
-    display: 'flex',
-    flexDirection: 'column',
+    width: '100%',
+    maxWidth: 760,
+    background: '#FFFFFF',
+    borderRadius: 14,
+    boxShadow: '0 30px 80px rgba(2,6,23,0.35)',
+    overflow: 'hidden',
+    border: '1px solid rgba(15,23,42,0.06)',
     position: 'relative',
-    background: '#fff',
-    border: '1.5px solid #d4dde4',
-    animation: 'modalIn 0.22s',
-  },
-  modalHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 12,
-    fontSize: '21px',
-    fontWeight: 700,
-    marginBottom: '10px'
-  },
-  modalIcon: {
-    fontSize: '34px',
-    marginRight: '10px',
-    padding: '2px 4px'
-  },
-  modalEstado: {
-    fontWeight: 600,
-    fontSize: '19px',
-    textShadow: '0 1px 6px rgba(120,120,255,0.1)',
+    padding: 22
   },
   modalClose: {
     position: 'absolute',
-    right: '16px',
-    top: '16px',
+    right: 16,
+    top: 16,
     border: 'none',
     background: '#fff',
-    borderRadius: '50%',
-    width: '32px',
-    height: '32px',
+    borderRadius: 8,
+    width: 36,
+    height: 36,
+    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    boxShadow: '0 4px 12px rgba(2,6,23,0.08)',
+    cursor: 'pointer'
+  },
+  modalHeader: {
     display: 'flex',
-    boxShadow: '0 2px 6px rgba(160,170,180,0.14)',
-    cursor: 'pointer',
-    zIndex: 1002,
-    transition: 'background 0.21s',
+    gap: 14,
+    alignItems: 'center'
+  },
+  modalIcon: {
+    fontSize: 34
+  },
+  modalEstado: {
+    fontSize: 18,
+    fontWeight: 800,
+    color: '#0F172A'
+  },
+  modalSubtitle: {
+    fontSize: 13,
+    color: '#374151',
+    marginTop: 4
   },
   modalLine: {
     width: '100%',
-    height: '2px',
-    backgroundColor: '#e2e5ec',
-    margin: '17px 0 10px 0',
-    borderRadius: '2px'
+    height: 2,
+    backgroundColor: '#E6EEF7',
+    margin: '16px 0',
+    borderRadius: 4
   },
   modalInfoBlock: {
     display: 'flex',
-    flexDirection: 'column',
-    gap: 7,
-    alignItems: 'start'
+    gap: 20,
+    alignItems: 'flex-start',
+    flexWrap: 'wrap'
   },
   modalTitle: {
-    color: '#345475',
-    fontSize: '20px',
-    marginBottom: '0'
-  },
-  modalLabel: {
-    color: '#444',
-    fontSize: '13.2px',
-    fontStyle: 'italic',
-    marginBottom: '2px',
-    maxWidth: '90%',
+    color: '#0F172A',
+    fontSize: 20,
+    margin: 0
   },
   modalDetails: {
-    marginTop: '8px',
-    fontSize: '14px',
-    color: '#555',
+    fontSize: 14,
+    color: '#111827',
     display: 'flex',
     flexDirection: 'column',
-    gap: '3px'
+    gap: 8
   },
-  modalDetailName: {
-    fontWeight: 'bold',
-    color: '#345475',
-    fontSize: '13px'
-  },
-  modalDetailValue: {
-    color: '#333',
-    fontSize: '13.7px',
-    fontWeight: 500,
-  },
-  // Vertical Estado bar
-  estadoVertContainer: {
+
+  progressBar: {
     display: 'flex',
-    flexDirection: 'row',
-    gap: '8px',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    margin: '17px 0 3px',
+    height: 12,
+    borderRadius: 8,
+    overflow: 'hidden',
+    background: '#E5E7EB',
+    marginTop: 6
   },
-  estadoVertStep: {
+  progressSegment: {
+    flex: 1,
+    transition: 'background 0.25s ease'
+  },
+
+  modalFooter: {
     display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: '5px',
-    borderRadius: '8px',
-    background: '#eee',
-    minWidth: '55px',
-    boxShadow: ''
+    justifyContent: 'flex-end',
+    gap: 12,
+    marginTop: 18
   },
-  estadoVertIcon: {
-    fontSize: '19px',
-    marginBottom: '2px',
-    opacity: 1
+  actionPrimary: {
+    display: 'inline-block',
+    padding: '10px 16px',
+    background: '#0B63CE',
+    color: '#FFF',
+    borderRadius: 8,
+    textDecoration: 'none',
+    fontWeight: 700
   },
-  estadoVertLabel: {
-    fontSize: '11.25px',
-    color: '#636b80',
-    textTransform: 'capitalize'
-  },
+  actionSecondary: {
+    padding: '10px 16px',
+    background: 'transparent',
+    border: '1px solid #E6E9EF',
+    color: '#111827',
+    borderRadius: 8,
+    cursor: 'pointer'
+  }
 };
 
 export default Logistica;
