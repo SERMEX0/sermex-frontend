@@ -7,26 +7,21 @@ const estadoInfo = {
   recibido: {
     text: 'El producto llegó a SERMEX, pronto empezará la revisión.',
     color: '#0B63CE',
-    bg: 'linear-gradient(90deg,#E8F4FF,#FFFFFF)',
-    icon: '📦',
+    bg: 'linear-gradient(90deg,#E8F4FF,#FFFFFF)'
   },
   en_revision: {
     text: 'El producto se encuentra en revisión. Actualmente se están reportando y descartando fallas.',
     color: '#B86B00',
-    bg: 'linear-gradient(90deg,#FFF6EA,#FFFFFF)',
-    icon: '🔎',
-  },
+    bg: 'linear-gradient(90deg,#FFF6EA,#FFFFFF)'  },
   reparacion: {
     text: 'El producto se encuentra en proceso de reparación.',
     color: '#117A37',
-    bg: 'linear-gradient(90deg,#F0FBF3,#FFFFFF)',
-    icon: '🛠️',
+    bg: 'linear-gradient(90deg,#F0FBF3,#FFFFFF)'
   },
   completado: {
     text: 'El producto está listo y ya ha sido enviado de vuelta.',
     color: '#007E8A',
-    bg: 'linear-gradient(90deg,#E8F8FA,#FFFFFF)',
-    icon: '✅',
+    bg: 'linear-gradient(90deg,#E8F8FA,#FFFFFF)'
   },
 };
 
